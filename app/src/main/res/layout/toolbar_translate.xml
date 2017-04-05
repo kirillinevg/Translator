@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar_translate"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="?attr/colorPrimary"
+    android:elevation="4dp"
+    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="@android:color/holo_green_light">
+
+        <TextView
+            android:id="@+id/source_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="Английский"
+            android:layout_toLeftOf="@+id/swap_languages"
+            android:layout_marginRight="10dp"
+            android:textSize="18sp"
+            style="@style/Widget.Design.TabLayout"/>
+
+        <ImageButton
+            android:id="@+id/swap_languages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/holo_green_light"
+            app:srcCompat="@drawable/ic_swap_horiz_black_24dp" />
+
+        <TextView
+            android:id="@+id/destination_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Русский"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/swap_languages"
+            android:layout_marginLeft="10dp"
+            android:textSize="18sp"
+            style="@style/Widget.Design.TabLayout"/>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.Toolbar>
