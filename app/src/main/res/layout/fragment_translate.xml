@@ -7,33 +7,7 @@
 
     <include layout="@layout/toolbar_translate"/>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_margin="10dp"
-        android:background="@drawable/source_text_shape">
-
-        <EditText
-            android:id="@+id/source_text"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:gravity="top|left"
-            android:hint="@string/source_text_hint"
-            android:inputType="textMultiLine"
-            android:background="@null"/>
-
-        <ImageButton
-            android:id="@+id/clear_source_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@drawable/ic_clear_black_24dp" />
-
-    </LinearLayout>
+    <include layout="@layout/editor_source_text"/>
 
     <TextView
         android:id="@+id/translated_text"
