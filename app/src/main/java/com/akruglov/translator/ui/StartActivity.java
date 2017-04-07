@@ -9,9 +9,9 @@ import android.view.MenuItem;
 
 import com.akruglov.translator.R;
 import com.akruglov.translator.ui.adapters.ViewPagerAdapter;
-import com.akruglov.translator.ui.fragments.TranslateFragment;
+import com.akruglov.translator.ui.translate.view.TranslateFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class StartActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private MenuItem prevMenuItem;
