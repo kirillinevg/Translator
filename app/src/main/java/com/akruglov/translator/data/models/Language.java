@@ -1,4 +1,4 @@
-package com.akruglov.translator.ui.translate.models;
+package com.akruglov.translator.data.models;
 
 /**
  * Created by akruglov on 06.04.17.

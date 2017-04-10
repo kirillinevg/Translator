@@ -1,16 +1,18 @@
 package com.akruglov.translator.ui.translate.presenter;
 
-import com.akruglov.translator.ui.translate.models.Language;
-import com.akruglov.translator.ui.translate.models.TranslateDataModel;
+import com.akruglov.translator.data.models.Language;
+import com.akruglov.translator.data.models.Translation;
 import com.akruglov.translator.ui.translate.view.ITranslateView;
 import com.akruglov.translator.ui.translate.view.ITranslateView$$State;
-import com.akruglov.translator.ui.translate.view.TranslateFragment;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -30,7 +32,7 @@ public final class TranslatePresenterTest {
     TranslatePresenterCache translatePresenterCache;
 
     private TranslatePresenter presenter;
-    private TranslateDataModel translateDataModel;
+    private Translation translation;
 
     @Before
     public void setUp() {
@@ -38,16 +40,15 @@ public final class TranslatePresenterTest {
         presenter = new TranslatePresenter(translatePresenterCache);
         presenter.attachView(translateView);
         presenter.setViewState(translateViewState);
-        //presenter.setTranslatePresenterCache(translatePresenterCache);
 
-        translateDataModel = new TranslateDataModel(new Language(0, "ru", "Русский"),
+        translation = new Translation(new Language(0, "ru", "Русский"),
                 new Language(1, "it", "Итальянский"), "Ребенок", "Bambino");
     }
 
     @Test
     public void init_notNullCache() {
         when(translatePresenterCache.isCacheExists()).thenReturn(true);
-        when(translatePresenterCache.getTranslateDataModel()).thenReturn(translateDataModel);
+        when(translatePresenterCache.getTranslation()).thenReturn(translation);
 
         presenter.init();
 
@@ -57,5 +58,37 @@ public final class TranslatePresenterTest {
         verify(translateViewState).showTranslatedText("Bambino");
     }
 
+    @Test
+    public void init_nullCache() {
+        when(translatePresenterCache.isCacheExists()).thenReturn(false);
 
+        presenter.init();
+
+        verify(translatePresenterCache, times(1)).updateData(any(Translation.class));
+
+        verify(translateViewState).showSourceLanguage(anyString());
+        verify(translateViewState).showDestinationLanguage(anyString());
+        verify(translateViewState).showSourceText(any());
+        verify(translateViewState).showTranslatedText(any());
+    }
+
+    @Test
+    public void updateSourceText_notNull() {
+        presenter.updateSourceText("test");
+
+        verify(translatePresenterCache, times(1)).updateSourceText("test");
+        verify(translatePresenterCache, times(1)).updateTranslatedText("test");
+
+        verify(translateViewState).showTranslatedText("test");
+    }
+
+    @Test
+    public void updateSourceText_isNull() {
+        presenter.updateSourceText(null);
+
+        verify(translatePresenterCache, times(1)).updateSourceText(null);
+        verify(translatePresenterCache, times(1)).updateTranslatedText(null);
+
+        verify(translateViewState).showTranslatedText(null);
+    }
 }

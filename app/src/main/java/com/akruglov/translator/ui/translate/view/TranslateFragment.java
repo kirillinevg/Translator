@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.akruglov.translator.R;
-import com.akruglov.translator.ui.translate.models.Language;
+import com.akruglov.translator.data.models.Language;
 import com.akruglov.translator.ui.translate.presenter.TranslatePresenter;
 import com.akruglov.translator.ui.translate.presenter.TranslatePresenterCache;
 import com.arellomobile.mvp.MvpAppCompatFragment;
@@ -45,7 +45,6 @@ public class TranslateFragment extends MvpAppCompatFragment implements ITranslat
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //translatePresenter.setTranslatePresenterCache(new TranslatePresenterCache());
         translatePresenter.init();
     }
 

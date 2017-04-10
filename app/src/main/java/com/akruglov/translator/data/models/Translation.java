@@ -1,4 +1,4 @@
-package com.akruglov.translator.ui.translate.models;
+package com.akruglov.translator.data.models;
 
 import android.support.annotation.NonNull;
 
@@ -6,17 +6,17 @@ import android.support.annotation.NonNull;
  * Created by akruglov on 07.04.17.
  */
 
-public class TranslateDataModel {
+public class Translation {
 
     private Language sourceLanguage;
     private Language destinationLanguage;
     private String sourceText;
     private String translatedText;
 
-    public TranslateDataModel(@NonNull Language sourceLanguage,
-                              @NonNull Language destinationLanguage,
-                              String sourceText,
-                              String translatedText) {
+    public Translation(@NonNull Language sourceLanguage,
+                       @NonNull Language destinationLanguage,
+                       String sourceText,
+                       String translatedText) {
         this.sourceLanguage = sourceLanguage;
         this.destinationLanguage = destinationLanguage;
         this.sourceText = sourceText;
