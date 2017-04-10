@@ -1,6 +1,6 @@
 package com.akruglov.translator.ui.translate.view;
 
-import com.akruglov.translator.ui.translate.models.Language;
+import com.akruglov.translator.data.models.Language;
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;

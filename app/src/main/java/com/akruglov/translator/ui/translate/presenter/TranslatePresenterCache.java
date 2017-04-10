@@ -2,8 +2,8 @@ package com.akruglov.translator.ui.translate.presenter;
 
 import android.support.annotation.NonNull;
 
-import com.akruglov.translator.ui.translate.models.Language;
-import com.akruglov.translator.ui.translate.models.TranslateDataModel;
+import com.akruglov.translator.data.models.Language;
+import com.akruglov.translator.data.models.Translation;
 
 /**
  * Created by akruglov on 06.04.17.
@@ -11,25 +11,31 @@ import com.akruglov.translator.ui.translate.models.TranslateDataModel;
 
 public class TranslatePresenterCache {
 
-    private TranslateDataModel translateDataModel;
+    private Translation translation;
 
     public boolean isCacheExists() {
-        return translateDataModel != null;
+        return translation != null;
     }
 
-    public void updateData(@NonNull TranslateDataModel translateDataModel) {
-        this.translateDataModel = translateDataModel;
+    public void updateData(@NonNull Translation translation) {
+        this.translation = translation;
     }
 
-    public TranslateDataModel getTranslateDataModel() {
-        return translateDataModel;
+    public Translation getTranslation() {
+        return translation;
     }
 
     public void updateSourceText(String text) {
-        translateDataModel.setSourceText(text);
+        if (translation == null) {
+            return;
+        }
+        translation.setSourceText(text);
     }
 
     public void updateTranslatedText(String text) {
-        translateDataModel.setTranslatedText(text);
+        if (translation == null) {
+            return;
+        }
+        translation.setTranslatedText(text);
     }
 }

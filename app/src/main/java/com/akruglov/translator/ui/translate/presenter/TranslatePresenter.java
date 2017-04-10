@@ -1,10 +1,9 @@
 package com.akruglov.translator.ui.translate.presenter;
 
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
-import com.akruglov.translator.ui.translate.models.Language;
-import com.akruglov.translator.ui.translate.models.TranslateDataModel;
+import com.akruglov.translator.data.models.Language;
+import com.akruglov.translator.data.models.Translation;
 import com.akruglov.translator.ui.translate.view.ITranslateView;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
@@ -22,13 +21,9 @@ public class TranslatePresenter extends MvpPresenter<ITranslateView> implements 
         this.translatePresenterCache = translatePresenterCache;
     }
 
-    public void setTranslatePresenterCache(@NonNull TranslatePresenterCache translatePresenterCache) {
-        this.translatePresenterCache = translatePresenterCache;
-    }
-
     public void init() {
         if (translatePresenterCache.isCacheExists()) {
-            setTranslateInfoToView(translatePresenterCache.getTranslateDataModel());
+            setTranslateInfoToView(translatePresenterCache.getTranslation());
         } else {
             loadTranslateInfoFromData();
         };
@@ -36,22 +31,22 @@ public class TranslatePresenter extends MvpPresenter<ITranslateView> implements 
 
     private void loadTranslateInfoFromData() {
         // TODO: load from interactor
-        TranslateDataModel data = new TranslateDataModel(new Language(0, "fr", "Французский"),
+        Translation data = new Translation(new Language(0, "fr", "Французский"),
                 new Language(0, "ru", "Русский"), null, null);
         translatePresenterCache.updateData(data);
         setTranslateInfoToView(data);
     }
 
-    private void setTranslateInfoToView(@NonNull TranslateDataModel translateDataModel) {
-        getViewState().showSourceLanguage(translateDataModel.getSourceLanguage().getDescription());
-        getViewState().showDestinationLanguage(translateDataModel.getDestinationLanguage().getDescription());
-        getViewState().showSourceText(translateDataModel.getSourceText());
-        getViewState().showTranslatedText(translateDataModel.getTranslatedText());
+    private void setTranslateInfoToView(@NonNull Translation translation) {
+        getViewState().showSourceLanguage(translation.getSourceLanguage().getDescription());
+        getViewState().showDestinationLanguage(translation.getDestinationLanguage().getDescription());
+        getViewState().showSourceText(translation.getSourceText());
+        getViewState().showTranslatedText(translation.getTranslatedText());
     }
 
     @Override
     public void updateSourceText(String sourceText) {
-        if (TextUtils.isEmpty(sourceText)) {
+        if (sourceText == null || sourceText.isEmpty()) {
             clearTexts();
         } else {
             translatePresenterCache.updateSourceText(sourceText);
