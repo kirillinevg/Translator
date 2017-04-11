@@ -29,7 +29,7 @@ public class DbLab implements DbContract {
     List<Language> getLanguages() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String tables = LANGUAGES;
-        String orderBy = Languages.DESCRIPTION + "ASC";
+        String orderBy = Languages.DESCRIPTION + " ASC";
 
         Cursor c = db.query(LANGUAGES,
                 null,

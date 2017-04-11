@@ -46,7 +46,7 @@ public class TranslateLocalDataSource implements TranslateDataSource {
                 uiHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (languages.isEmpty()) {
+                        if (languages == null || languages.isEmpty()) {
                             callback.onNotAvailable();
                         } else {
                             callback.onLoaded(languages);

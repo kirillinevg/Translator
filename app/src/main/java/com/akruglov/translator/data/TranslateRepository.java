@@ -109,7 +109,7 @@ public class TranslateRepository implements TranslateDataSource {
     }
 
     private Language getLanguageFromCacheByKey(String key) {
-        for (int i = 0; i < cache.size(); ++i) {
+        for (int i = 1; i < cache.size(); ++i) {
             Language language = cache.get(i);
             if (language.getKey().equals(key)) {
                 return language;
