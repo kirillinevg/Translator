@@ -2,11 +2,14 @@ package com.akruglov.translator.ui.translate.presenter;
 
 import android.support.annotation.NonNull;
 
-import com.akruglov.translator.data.models.Language;
+import com.akruglov.translator.data.TranslateDataSource;
+import com.akruglov.translator.data.TranslateRepository;
 import com.akruglov.translator.data.models.Translation;
 import com.akruglov.translator.ui.translate.view.ITranslateView;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
+
+import timber.log.Timber;
 
 /**
  * Created by akruglov on 06.04.17.
@@ -16,25 +19,38 @@ import com.arellomobile.mvp.MvpPresenter;
 public class TranslatePresenter extends MvpPresenter<ITranslateView> implements ITranslatePresenter {
 
     private TranslatePresenterCache translatePresenterCache;
+    private TranslateRepository translateRepository;
 
-    public TranslatePresenter(@NonNull TranslatePresenterCache translatePresenterCache) {
+    public TranslatePresenter(@NonNull TranslatePresenterCache translatePresenterCache,
+                              @NonNull TranslateRepository translateRepository) {
         this.translatePresenterCache = translatePresenterCache;
+        this.translateRepository = translateRepository;
+        Timber.tag("TranslatePresenter");
     }
 
     public void init() {
         if (translatePresenterCache.isCacheExists()) {
             setTranslateInfoToView(translatePresenterCache.getTranslation());
         } else {
-            loadTranslateInfoFromData();
+            loadLastTranslation();
         };
     }
 
-    private void loadTranslateInfoFromData() {
-        // TODO: load from interactor
-        Translation data = new Translation(new Language(0, "fr", "Французский"),
-                new Language(0, "ru", "Русский"), null, null);
-        translatePresenterCache.updateData(data);
-        setTranslateInfoToView(data);
+    private void loadLastTranslation() {
+        translateRepository.getLastTranslation(new TranslateDataSource.ResultCallback<Translation>() {
+
+            @Override
+            public void onLoaded(Translation result) {
+                translatePresenterCache.updateData(result);
+                setTranslateInfoToView(result);
+            }
+
+            @Override
+            public void onNotAvailable() {
+                Timber.e("LoadLastTranslation failed");
+            }
+
+        });
     }
 
     private void setTranslateInfoToView(@NonNull Translation translation) {

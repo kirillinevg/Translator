@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.akruglov.translator.R;
 import com.akruglov.translator.data.models.Language;
+import com.akruglov.translator.injection.Injection;
 import com.akruglov.translator.ui.translate.presenter.TranslatePresenter;
 import com.akruglov.translator.ui.translate.presenter.TranslatePresenterCache;
 import com.arellomobile.mvp.MvpAppCompatFragment;
@@ -38,7 +39,8 @@ public class TranslateFragment extends MvpAppCompatFragment implements ITranslat
 
     @ProvidePresenter
     TranslatePresenter provideTranslatePresenter() {
-        return new TranslatePresenter(new TranslatePresenterCache());
+        return new TranslatePresenter(new TranslatePresenterCache(),
+                Injection.provideTranslateRepositiory(getActivity().getApplicationContext()));
     }
 
     @Override

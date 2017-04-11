@@ -5,7 +5,9 @@ import com.akruglov.translator.data.models.Translation;
 
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 
 /**
  * Created by akruglov on 08.04.17.
@@ -20,7 +22,7 @@ public class TranslatePresenterCacheTest {
         TranslatePresenterCache translatePresenterCache = new TranslatePresenterCache();
 
         // assert isCacheExist
-        assertThat(translatePresenterCache.isCacheExists()).isFalse();
+        assertFalse(translatePresenterCache.isCacheExists());
 
         // test no null exception
         translatePresenterCache.updateSourceText(null);
@@ -34,12 +36,13 @@ public class TranslatePresenterCacheTest {
         translatePresenterCache.updateTranslatedText("mother");
 
         // assert new texts
-        assertThat(translatePresenterCache.getTranslation().getSourceText()).isEqualTo("мама");
-        assertThat(translatePresenterCache.getTranslation().getTranslatedText()).isEqualTo("mother");
+        assertEquals(translatePresenterCache.getTranslation().getSourceText(), "мама");
+        assertEquals(translatePresenterCache.getTranslation().getTranslatedText(), "mother");
     }
 
     private Translation getData() {
         return new Translation(
+                -1,
                 new Language(0, "ru", "Русский"),
                 new Language(1, "en", "Англйский"),
                 "папа",

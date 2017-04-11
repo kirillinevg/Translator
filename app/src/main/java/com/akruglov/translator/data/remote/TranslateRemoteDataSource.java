@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,7 +46,7 @@ public class TranslateRemoteDataSource implements TranslateDataSource {
         translateService = retrofit.create(YandexService.class);
     }
 
-    public void getLanguages(ResultCallback<List<Language>> callback) {
+    public void getLanguages(final ResultCallback<List<Language>> callback) {
         Call<GetLanguagesResult> getLanguagesResultCall = translateService.getLanguages(
                         YandexService.API_KEY,
                         Locale.getDefault().getLanguage());
@@ -55,7 +56,9 @@ public class TranslateRemoteDataSource implements TranslateDataSource {
                 if (response.isSuccessful()) {
                     HashMap<String,String> languagesMap = response.body().getLanguages();
                     List<Language> languages = new ArrayList<Language>();
-                    languagesMap.forEach((k, v) -> languages.add(new Language(-1, k, v)));
+                    for (String key : languagesMap.keySet()) {
+                        languages.add(new Language(-1, key, languagesMap.get(key)));
+                    }
                     callback.onLoaded(languages);
                 }
             }
@@ -79,7 +82,7 @@ public class TranslateRemoteDataSource implements TranslateDataSource {
             public void onResponse(Call<TranslateResult> call, Response<TranslateResult> response) {
                 if (response.isSuccessful()) {
                     List<String> text = response.body().getText();
-                    text.forEach(System.out::println);
+                    //text.forEach(System.out::println);
                 }
             }
 

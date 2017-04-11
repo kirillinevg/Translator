@@ -46,7 +46,7 @@ public class TranslateRepository implements TranslateDataSource {
         return INSTANCE;
     }
 
-    private void makeDefaultTranslationFromLocal(ResultCallback<Translation> callback) {
+    private void makeDefaultTranslationFromLocal(final ResultCallback<Translation> callback) {
         translateLocalDataSource.getLanguages(new ResultCallback<List<Language>>() {
 
             @Override
@@ -63,7 +63,7 @@ public class TranslateRepository implements TranslateDataSource {
         });
     }
 
-    private void getLanguagesFromNetwork(ResultCallback<Translation> callback) {
+    private void getLanguagesFromNetwork(final ResultCallback<Translation> callback) {
         translateRemoteDataSource.getLanguages(new ResultCallback<List<Language>>() {
 
             @Override
@@ -78,7 +78,7 @@ public class TranslateRepository implements TranslateDataSource {
         });
     }
 
-    private void saveLanguagesToLocal(List<Language> languages, ResultCallback<Translation> callback) {
+    private void saveLanguagesToLocal(List<Language> languages, final ResultCallback<Translation> callback) {
         translateLocalDataSource.setLanguages(languages, new ResultCallback<List<Language>>() {
 
             @Override

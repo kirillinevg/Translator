@@ -38,11 +38,11 @@ public class TranslateLocalDataSource implements TranslateDataSource {
         return INSTANCE;
     }
 
-    public void getLanguages(ResultCallback<List<Language>> callback) {
+    public void getLanguages(final ResultCallback<List<Language>> callback) {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                List<Language> languages = dbLab.getLanguages();
+                final List<Language> languages = dbLab.getLanguages();
                 uiHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -57,7 +57,7 @@ public class TranslateLocalDataSource implements TranslateDataSource {
         });
     }
 
-    public void setLanguages(List<Language> languages, ResultCallback<List<Language>> callback) {
+    public void setLanguages(final List<Language> languages, final ResultCallback<List<Language>> callback) {
         executor.execute(new Runnable() {
             @Override
             public void run() {

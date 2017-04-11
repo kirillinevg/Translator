@@ -1,5 +1,6 @@
 package com.akruglov.translator.ui.translate.presenter;
 
+import com.akruglov.translator.data.TranslateRepository;
 import com.akruglov.translator.data.models.Language;
 import com.akruglov.translator.data.models.Translation;
 import com.akruglov.translator.ui.translate.view.ITranslateView;
@@ -31,17 +32,20 @@ public final class TranslatePresenterTest {
     @Mock
     TranslatePresenterCache translatePresenterCache;
 
+    @Mock
+    TranslateRepository translateRepository;
+
     private TranslatePresenter presenter;
     private Translation translation;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        presenter = new TranslatePresenter(translatePresenterCache);
+        presenter = new TranslatePresenter(translatePresenterCache, translateRepository);
         presenter.attachView(translateView);
         presenter.setViewState(translateViewState);
 
-        translation = new Translation(new Language(0, "ru", "Русский"),
+        translation = new Translation(-1, new Language(0, "ru", "Русский"),
                 new Language(1, "it", "Итальянский"), "Ребенок", "Bambino");
     }
 
@@ -68,8 +72,8 @@ public final class TranslatePresenterTest {
 
         verify(translateViewState).showSourceLanguage(anyString());
         verify(translateViewState).showDestinationLanguage(anyString());
-        verify(translateViewState).showSourceText(any());
-        verify(translateViewState).showTranslatedText(any());
+        verify(translateViewState).showSourceText(anyString());
+        verify(translateViewState).showTranslatedText(anyString());
     }
 
     @Test

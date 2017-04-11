@@ -11,10 +11,6 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-
-        jackOptions {
-            enabled true
-        }
     }
     buildTypes {
         release {
@@ -22,16 +18,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
 def support = '25.3.1'
 def moxy = '1.4.6'
 def retrofit = '2.2.0'
+def canary = '1.5'
+def timber = '4.5.1'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -45,12 +38,15 @@ dependencies {
 
     compile "com.squareup.retrofit2:retrofit:$retrofit"
     compile "com.squareup.retrofit2:converter-gson:$retrofit"
+    compile "com.jakewharton.timber:timber:$timber"
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.7.21'
-    testCompile "org.assertj:assertj-core:3.0.0"
 
     compile "com.arello-mobile:moxy:$moxy"
     annotationProcessor "com.arello-mobile:moxy-compiler:$moxy"
     compile "com.arello-mobile:moxy-app-compat:$moxy"
+
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$canary"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$canary"
 }
