@@ -1,7 +1,10 @@
 package com.akruglov.translator.data.remote;
 
+import android.text.TextUtils;
+
 import com.akruglov.translator.data.TranslateDataSource;
 import com.akruglov.translator.data.models.Language;
+import com.akruglov.translator.data.models.Translation;
 import com.akruglov.translator.data.remote.api.DetectLanguageResult;
 import com.akruglov.translator.data.remote.api.GetLanguagesResult;
 import com.akruglov.translator.data.remote.api.TranslateResult;
@@ -70,25 +73,26 @@ public class TranslateRemoteDataSource implements TranslateDataSource {
         });
     }
 
-    public void translate(String sourceText, String sourceLanguage, String destinationLanguage) {
+    public void getTranslation(final Translation translation, final ResultCallback<Translation> callback) {
         Call<TranslateResult> translateCall = translateService.translate(
                 YandexService.API_KEY,
-                sourceLanguage + "-" + destinationLanguage,
+                translation.getSourceLanguage().getKey() + "-" + translation.getDestinationLanguage().getKey(),
                 "html",
-                sourceText);
+                translation.getSourceText());
 
         translateCall.enqueue(new Callback<TranslateResult>() {
             @Override
             public void onResponse(Call<TranslateResult> call, Response<TranslateResult> response) {
                 if (response.isSuccessful()) {
                     List<String> text = response.body().getText();
-                    //text.forEach(System.out::println);
+                    translation.setTranslatedText(TextUtils.join(" ", text));
+                    callback.onLoaded(translation);
                 }
             }
 
             @Override
             public void onFailure(Call<TranslateResult> call, Throwable throwable) {
-                System.out.println(throwable);
+                callback.onNotAvailable();
             }
         });
     }

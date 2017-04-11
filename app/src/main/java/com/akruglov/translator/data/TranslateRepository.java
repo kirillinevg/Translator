@@ -46,6 +46,45 @@ public class TranslateRepository implements TranslateDataSource {
         return INSTANCE;
     }
 
+    public void translate(final Translation translation, final ResultCallback<Translation> callback) {
+        translateLocalDataSource.findTranslation(translation, new ResultCallback<Translation>() {
+
+            @Override
+            public void onLoaded(Translation result) {
+                callback.onLoaded(result);
+            }
+
+            @Override
+            public void onNotAvailable() {
+                getTranslationFromNetwork(translation, callback);
+            }
+        });
+    }
+
+    private void getTranslationFromNetwork(final Translation translation, final ResultCallback<Translation> callback) {
+        translateRemoteDataSource.getTranslation(translation, new ResultCallback<Translation>() {
+
+            @Override
+            public void onLoaded(Translation result) {
+                translateLocalDataSource.insertTranslation(translation, callback);
+            }
+
+            @Override
+            public void onNotAvailable() {
+                callback.onNotAvailable();
+            }
+        });
+    }
+
+    public void getLastTranslation(ResultCallback<Translation> callback) {
+        if (sharedPreferencesManager.isTranslateInfoExists()) {
+            Translation translation = sharedPreferencesManager.getTranslation();
+            callback.onLoaded(translation);
+        } else {
+            makeDefaultTranslationFromLocal(callback);
+        }    
+    }
+
     private void makeDefaultTranslationFromLocal(final ResultCallback<Translation> callback) {
         translateLocalDataSource.getLanguages(new ResultCallback<List<Language>>() {
 
@@ -93,15 +132,6 @@ public class TranslateRepository implements TranslateDataSource {
                 callback.onNotAvailable();
             }
         });
-    }
-
-    public void getLastTranslation(ResultCallback<Translation> callback) {
-        if (sharedPreferencesManager.isTranslateInfoExists()) {
-            Translation translation = sharedPreferencesManager.getTranslation();
-            callback.onLoaded(translation);
-        } else {
-            makeDefaultTranslationFromLocal(callback);
-        }    
     }
 
     private String getSystemlanguage() {

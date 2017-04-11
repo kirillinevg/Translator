@@ -66,8 +66,19 @@ public class TranslatePresenter extends MvpPresenter<ITranslateView> implements 
             clearTexts();
         } else {
             translatePresenterCache.updateSourceText(sourceText);
-            translatePresenterCache.updateTranslatedText(sourceText);
-            getViewState().showTranslatedText(sourceText);
+            final Translation translation = translatePresenterCache.getTranslation();
+            translateRepository.translate(translation, new TranslateDataSource.ResultCallback<Translation>() {
+                @Override
+                public void onLoaded(Translation result) {
+                    translatePresenterCache.updateData(translation);
+                    getViewState().showTranslatedText(translation.getTranslatedText());
+                }
+
+                @Override
+                public void onNotAvailable() {
+                    Timber.e("Translate failed");
+                }
+            });
         }
     }
 

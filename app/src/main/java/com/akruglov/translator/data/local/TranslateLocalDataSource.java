@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import com.akruglov.translator.data.TranslateDataSource;
 import com.akruglov.translator.data.models.Language;
+import com.akruglov.translator.data.models.Translation;
 
 import java.util.List;
 import java.util.concurrent.BlockingDeque;
@@ -66,6 +67,40 @@ public class TranslateLocalDataSource implements TranslateDataSource {
                     @Override
                     public void run() {
                         callback.onLoaded(languages);
+                    }
+                });
+            }
+        });
+    }
+
+    public void findTranslation(final Translation translation, final ResultCallback<Translation> callback) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                final Translation foundedTranslation = dbLab.findTranslation(translation);
+                uiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (foundedTranslation != null) {
+                            callback.onLoaded(foundedTranslation);
+                        } else {
+                            callback.onNotAvailable();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public void insertTranslation(final Translation translation, final ResultCallback<Translation> callback) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                final Translation updatedTranslation = dbLab.insertTranslation(translation);
+                uiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onLoaded(updatedTranslation);
                     }
                 });
             }
