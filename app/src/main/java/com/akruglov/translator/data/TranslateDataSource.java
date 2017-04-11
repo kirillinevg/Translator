@@ -8,7 +8,8 @@ import com.akruglov.translator.data.models.Language;
 
 public interface TranslateDataSource {
 
-    interface GetLanguageCallback {
-        void onLoadLanguage(Language language);
+    interface ResultCallback<T> {
+        void onLoaded(T result);
+        void onNotAvailable();
     }
 }

@@ -29,8 +29,7 @@ public class DbOpenHelper extends SQLiteOpenHelper implements DbContract {
             History.SOURCE_LANG_ID + " INTEGER NOT NULL, " +
             History.DEST_LANG_ID + " INTEGER NOT NULL, " +
             History.SOURCE_TEXT + " TEXT NOT NULL, " +
-            History.TRANSLATED_TEXT + " TEXT NOT NULL, " +
-            History.IS_FAVORITE + " INTEGER NOT NULL)");
+            History.TRANSLATED_TEXT + " TEXT NOT NULL)");
     }
 
     @Override

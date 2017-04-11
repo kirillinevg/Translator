@@ -1,20 +1,34 @@
 package com.akruglov.translator.data.local;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
+
+import com.akruglov.translator.data.TranslateDataSource;
+import com.akruglov.translator.data.models.Language;
+
+import java.util.List;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by akruglov on 09.04.17.
  */
 
-public class TranslateLocalDataSource {
+public class TranslateLocalDataSource implements TranslateDataSource {
 
     private static TranslateLocalDataSource INSTANCE;
 
-    private DbOpenHelper dbHelper;
+    private DbLab dbLab;
+    private CustomExecutor executor;
+    private final Handler uiHandler = new Handler(Looper.getMainLooper());
 
     private TranslateLocalDataSource(@NonNull Context context) {
-        dbHelper = new DbOpenHelper(context);
+        dbLab = new DbLab(context);
+        executor = new CustomExecutor();
     }
 
     public static TranslateLocalDataSource getInstance(@NonNull Context context) {
@@ -24,5 +38,50 @@ public class TranslateLocalDataSource {
         return INSTANCE;
     }
 
+    public void getLanguages(ResultCallback<List<Language>> callback) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<Language> languages = dbLab.getLanguages();
+                uiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (languages.isEmpty()) {
+                            callback.onNotAvailable();
+                        } else {
+                            callback.onLoaded(languages);
+                        }
+                    }
+                });
+            }
+        });
+    }
 
+    public void setLanguages(List<Language> languages, ResultCallback<List<Language>> callback) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                dbLab.setLanguages(languages);
+                uiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onLoaded(languages);
+                    }
+                });
+            }
+        });
+    }
+
+    private static class CustomExecutor extends ThreadPoolExecutor {
+
+        private static final int CORE_POOL_SIZE = 3;
+        private static final int MAX_POOL_SIZE = 5;
+        private static final int KEEP_ALIVE_TIME = 120;
+        private static final TimeUnit TIME_UNIT = TimeUnit.SECONDS;
+        private static final BlockingDeque<Runnable> WORK_QUEUE = new LinkedBlockingDeque<>();
+
+        CustomExecutor() {
+            super(CORE_POOL_SIZE, MAX_POOL_SIZE, KEEP_ALIVE_TIME, TIME_UNIT, WORK_QUEUE);
+        }
+    }
 }

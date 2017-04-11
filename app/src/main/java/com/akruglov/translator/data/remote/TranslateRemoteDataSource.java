@@ -1,11 +1,13 @@
 package com.akruglov.translator.data.remote;
 
 import com.akruglov.translator.data.TranslateDataSource;
+import com.akruglov.translator.data.models.Language;
 import com.akruglov.translator.data.remote.api.DetectLanguageResult;
 import com.akruglov.translator.data.remote.api.GetLanguagesResult;
 import com.akruglov.translator.data.remote.api.TranslateResult;
 import com.akruglov.translator.data.remote.api.YandexService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -43,7 +45,7 @@ public class TranslateRemoteDataSource implements TranslateDataSource {
         translateService = retrofit.create(YandexService.class);
     }
 
-    public void getLanguages() {
+    public void getLanguages(ResultCallback<List<Language>> callback) {
         Call<GetLanguagesResult> getLanguagesResultCall = translateService.getLanguages(
                         YandexService.API_KEY,
                         Locale.getDefault().getLanguage());
@@ -51,14 +53,16 @@ public class TranslateRemoteDataSource implements TranslateDataSource {
         getLanguagesResultCall.enqueue(new Callback<GetLanguagesResult>() {
             public void onResponse(Call<GetLanguagesResult> call, Response<GetLanguagesResult> response) {
                 if (response.isSuccessful()) {
-                    HashMap<String,String> languages = response.body().getLanguages();
-                    languages.forEach((k, v) -> System.out.printf("Key: %s, Value: %s\n", k, v));
+                    HashMap<String,String> languagesMap = response.body().getLanguages();
+                    List<Language> languages = new ArrayList<Language>();
+                    languagesMap.forEach((k, v) -> languages.add(new Language(-1, k, v)));
+                    callback.onLoaded(languages);
                 }
             }
 
             @Override
             public void onFailure(Call<GetLanguagesResult> call, Throwable throwable) {
-                System.out.println(throwable);
+                callback.onNotAvailable();
             }
         });
     }

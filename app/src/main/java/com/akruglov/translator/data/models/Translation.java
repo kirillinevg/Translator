@@ -8,19 +8,33 @@ import android.support.annotation.NonNull;
 
 public class Translation {
 
+    private int id;
+
+
+
     private Language sourceLanguage;
     private Language destinationLanguage;
     private String sourceText;
     private String translatedText;
 
-    public Translation(@NonNull Language sourceLanguage,
+    public Translation(int id,
+                       @NonNull Language sourceLanguage,
                        @NonNull Language destinationLanguage,
                        String sourceText,
                        String translatedText) {
+        this.id = id;
         this.sourceLanguage = sourceLanguage;
         this.destinationLanguage = destinationLanguage;
         this.sourceText = sourceText;
         this.translatedText = translatedText;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Language getSourceLanguage() {
