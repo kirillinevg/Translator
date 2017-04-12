@@ -106,6 +106,6 @@ public class ChooseLanguageActivity extends MvpAppCompatActivity implements Choo
         Intent data = new Intent();
         data.putExtra(LANGUAGE_ID_EXTRA, languageId);
         setResult(RESULT_OK, data);
-        super.onBackPressed();
+        finish();
     }
 }
