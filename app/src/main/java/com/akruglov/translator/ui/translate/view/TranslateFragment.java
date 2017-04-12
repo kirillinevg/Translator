@@ -1,5 +1,7 @@
 package com.akruglov.translator.ui.translate.view;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 
 import com.akruglov.translator.R;
 import com.akruglov.translator.injection.Injection;
+import com.akruglov.translator.ui.chooselanguage.view.ChooseLanguageActivity;
 import com.akruglov.translator.ui.translate.presenter.TranslatePresenter;
 import com.akruglov.translator.ui.translate.presenter.TranslatePresenterCache;
 import com.arellomobile.mvp.MvpAppCompatFragment;
@@ -25,6 +28,9 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
  */
 
 public class TranslateFragment extends MvpAppCompatFragment implements TranslateView {
+
+    private static final int REQUEST_SOURCE_LANGUAGE = 1;
+    private static final int REQUEST_DESTINATION_LANGUAGE = 2;
 
     private TextView sourceLanguageTextView;
     private TextView destinationLanguageTextView;
@@ -56,8 +62,20 @@ public class TranslateFragment extends MvpAppCompatFragment implements Translate
         View view = inflater.inflate(R.layout.fragment_translate, container, false);
 
         sourceLanguageTextView = (TextView) view.findViewById(R.id.source_language);
+        sourceLanguageTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                translatePresenter.chooseSourceLanguage();
+            }
+        });
 
         destinationLanguageTextView = (TextView) view.findViewById(R.id.destination_language);
+        destinationLanguageTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                translatePresenter.chooseDestinationLanguage();
+            }
+        });
 
         swapLanguageButton = (ImageButton) view.findViewById(R.id.swap_languages);
         swapLanguageButton.setOnClickListener(new View.OnClickListener() {
@@ -133,5 +151,42 @@ public class TranslateFragment extends MvpAppCompatFragment implements Translate
     @Override
     public void showTranslatedText(String text) {
         translatedTextView.setText(text);
+    }
+
+    @Override
+    public void chooseSourceLanguage(int sourceLanguageId) {
+        Intent intent = ChooseLanguageActivity.createIntent(getActivity(),
+                getString(R.string.choose_source_lang_title), sourceLanguageId);
+        startActivityForResult(intent, REQUEST_SOURCE_LANGUAGE);
+    }
+
+    @Override
+    public void chooseDestinationLanguage(int destinationLanguageId) {
+        Intent intent = ChooseLanguageActivity.createIntent(getActivity(),
+                getString(R.string.choose_dest_lang_title), destinationLanguageId);
+        startActivityForResult(intent, REQUEST_DESTINATION_LANGUAGE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == REQUEST_SOURCE_LANGUAGE) {
+            if (data == null) {
+                return;
+            }
+            int newSourceLanguageId = ChooseLanguageActivity.getLanguageId(data);
+            translatePresenter.selectSourceLanguage(newSourceLanguageId);
+        }
+
+        if (requestCode == REQUEST_DESTINATION_LANGUAGE) {
+            if (data == null) {
+                return;
+            }
+            int newDestinationLanguageId = ChooseLanguageActivity.getLanguageId(data);
+            translatePresenter.selectDestinatonLanguage(newDestinationLanguageId);
+        }
     }
 }

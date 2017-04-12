@@ -68,7 +68,7 @@ public final class TranslatePresenterTest {
 
         presenter.init();
 
-        //verify(translatePresenterCache, times(1)).updateData(any(Translation.class));
+        //verify(translatePresenterCache, times(1)).setTranslation(any(Translation.class));
 
         verify(translateViewState).showSourceLanguage(anyString());
         verify(translateViewState).showDestinationLanguage(anyString());

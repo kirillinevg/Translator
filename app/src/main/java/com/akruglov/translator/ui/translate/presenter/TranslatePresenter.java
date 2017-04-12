@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.akruglov.translator.data.TranslateDataSource;
 import com.akruglov.translator.data.TranslateRepository;
+import com.akruglov.translator.data.models.Language;
 import com.akruglov.translator.data.models.Translation;
 import com.akruglov.translator.ui.translate.view.TranslateView;
 import com.arellomobile.mvp.InjectViewState;
@@ -41,7 +42,7 @@ public class TranslatePresenter extends MvpPresenter<TranslateView> {
 
             @Override
             public void onLoaded(Translation result) {
-                translatePresenterCache.updateData(result);
+                translatePresenterCache.setTranslation(result);
                 setTranslateInfoToView(result);
             }
 
@@ -74,7 +75,7 @@ public class TranslatePresenter extends MvpPresenter<TranslateView> {
         translateRepository.translate(translation, new TranslateDataSource.ResultCallback<Translation>() {
             @Override
             public void onLoaded(Translation result) {
-                translatePresenterCache.updateData(translation);
+                translatePresenterCache.setTranslation(translation);
                 getViewState().showTranslatedText(translation.getTranslatedText());
             }
 
@@ -101,4 +102,29 @@ public class TranslatePresenter extends MvpPresenter<TranslateView> {
     }
 
 
+    public void chooseSourceLanguage() {
+        getViewState().chooseSourceLanguage(translatePresenterCache.getTranslation().getSourceLanguage().getId());
+    }
+
+    public void chooseDestinationLanguage() {
+        getViewState().chooseDestinationLanguage(translatePresenterCache.getTranslation().getDestinationLanguage().getId());
+    }
+
+    public void selectSourceLanguage(int newSourceLanguageId) {
+        Language newSourceLanguage = translateRepository.getLanguageById(newSourceLanguageId);
+        if (newSourceLanguage != null) {
+            translatePresenterCache.setSourceLanguage(newSourceLanguage);
+            getViewState().showSourceLanguage(newSourceLanguage.getDescription());
+            translate();
+        }
+    }
+
+    public void selectDestinatonLanguage(int newDestinationLanguageId) {
+        Language newDestinationLanguage = translateRepository.getLanguageById(newDestinationLanguageId);
+        if (newDestinationLanguage != null) {
+            translatePresenterCache.setDestinationLanguage(newDestinationLanguage);
+            getViewState().showDestinationLanguage(newDestinationLanguage.getDescription());
+            translate();
+        }
+    }
 }

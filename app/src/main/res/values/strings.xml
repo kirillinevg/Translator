@@ -4,4 +4,6 @@
     <string name="title_bookmarks">Bookmarks</string>
     <string name="title_settings">Settings</string>
     <string name="source_text_hint">Enter text</string>
+    <string name="choose_source_lang_title">Text language</string>
+    <string name="choose_dest_lang_title">Translation language</string>
 </resources>

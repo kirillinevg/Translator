@@ -16,4 +16,6 @@ public interface TranslateView extends MvpView {
     void showDestinationLanguage(String language);
     void showSourceText(String text);
     void showTranslatedText(String text);
+    void chooseSourceLanguage(int sourceLanguageId);
+    void chooseDestinationLanguage(int destinationLanguageId);
 }

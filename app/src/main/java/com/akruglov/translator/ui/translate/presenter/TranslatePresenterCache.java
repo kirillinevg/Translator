@@ -17,7 +17,7 @@ public class TranslatePresenterCache {
         return translation != null;
     }
 
-    public void updateData(@NonNull Translation translation) {
+    public void setTranslation(@NonNull Translation translation) {
         this.translation = translation;
     }
 
@@ -44,5 +44,13 @@ public class TranslatePresenterCache {
         Language destinationLanguage = translation.getDestinationLanguage();
         translation.setSourceLanguage(destinationLanguage);
         translation.setDestinationLanguage(sourceLanguage);
+    }
+
+    public void setSourceLanguage(Language language) {
+        translation.setSourceLanguage(language);
+    }
+
+    public void setDestinationLanguage(Language language) {
+        translation.setDestinationLanguage(language);
     }
 }

@@ -29,7 +29,7 @@ public class TranslatePresenterCacheTest {
         translatePresenterCache.updateTranslatedText(null);
 
         // update cache
-        translatePresenterCache.updateData(getData());
+        translatePresenterCache.setTranslation(getData());
 
         // update texts
         translatePresenterCache.updateSourceText("мама");

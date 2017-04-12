@@ -5,4 +5,6 @@
     <string name="title_settings">Настройки</string>
     <string name="title_translation">Перевод</string>
     <string name="source_text_hint">Введите текст</string>
+    <string name="choose_source_lang_title">Язык текста</string>
+    <string name="choose_dest_lang_title">Язык перевода</string>
 </resources>
