@@ -6,4 +6,6 @@
     <string name="source_text_hint">Enter text</string>
     <string name="choose_source_lang_title">Text language</string>
     <string name="choose_dest_lang_title">Translation language</string>
+    <string name="history_tab_title">History</string>
+    <string name="favorites_tab_title">Favorites</string>
 </resources>

@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.akruglov.translator.R;
 import com.akruglov.translator.ui.adapters.ViewPagerAdapter;
+import com.akruglov.translator.ui.bookmarks.view.BookmarksFragment;
 import com.akruglov.translator.ui.translate.view.TranslateFragment;
 
 public class StartActivity extends AppCompatActivity {
@@ -27,9 +28,10 @@ public class StartActivity extends AppCompatActivity {
                     viewPager.setCurrentItem(0);
                     return true;
                 case R.id.navigation_bookmark:
+                    viewPager.setCurrentItem(1);
                     return true;
-                case R.id.navigation_settings:
-                    return true;
+//                case R.id.navigation_settings:
+//                    return true;
             }
             return false;
         }
@@ -76,9 +78,20 @@ public class StartActivity extends AppCompatActivity {
         setupViewPager();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (viewPager.getCurrentItem() != 0) {
+            onPageChangeListener.onPageSelected(0);
+            viewPager.setCurrentItem(0);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new TranslateFragment());
+        adapter.addFragment(new BookmarksFragment());
         viewPager.setAdapter(adapter);
     }
 
