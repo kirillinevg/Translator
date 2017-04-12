@@ -79,7 +79,7 @@ public class DbLab implements DbContract {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c = db.query(
                 HISTORY,
-                new String[] { History.ID },
+                new String[] { History.ID, History.TRANSLATED_TEXT },
                 History.SOURCE_LANG_ID + "= ? AND " +
                 History.DEST_LANG_ID + " = ? AND " +
                 History.SOURCE_TEXT + " = ?",
@@ -94,6 +94,7 @@ public class DbLab implements DbContract {
 
         if (c != null && (c.isFirst() || c.moveToFirst())) {
             translation.setId(c.getInt(0));
+            translation.setTranslatedText(c.getString(1));
             closeCursor(c);
             return translation;
         } else {

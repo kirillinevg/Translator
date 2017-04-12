@@ -61,6 +61,12 @@ public class TranslateFragment extends MvpAppCompatFragment implements ITranslat
         destinationLanguageTextView = (TextView) view.findViewById(R.id.destination_language);
 
         swapLanguageButton = (ImageButton) view.findViewById(R.id.swap_languages);
+        swapLanguageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                translatePresenter.swapLanguages();
+            }
+        });
 
         clearSourceTextButton = (ImageButton) view.findViewById(R.id.clear_source_text);
         clearSourceTextButton.setOnClickListener(new View.OnClickListener() {

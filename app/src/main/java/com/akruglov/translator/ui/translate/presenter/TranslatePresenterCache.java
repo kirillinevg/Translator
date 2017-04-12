@@ -38,4 +38,11 @@ public class TranslatePresenterCache {
         }
         translation.setTranslatedText(text);
     }
+
+    public void swapLanguages() {
+        Language sourceLanguage = translation.getSourceLanguage();
+        Language destinationLanguage = translation.getDestinationLanguage();
+        translation.setSourceLanguage(destinationLanguage);
+        translation.setDestinationLanguage(sourceLanguage);
+    }
 }

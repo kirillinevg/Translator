@@ -66,20 +66,34 @@ public class TranslatePresenter extends MvpPresenter<ITranslateView> implements 
             clearTexts();
         } else {
             translatePresenterCache.updateSourceText(sourceText);
-            final Translation translation = translatePresenterCache.getTranslation();
-            translateRepository.translate(translation, new TranslateDataSource.ResultCallback<Translation>() {
-                @Override
-                public void onLoaded(Translation result) {
-                    translatePresenterCache.updateData(translation);
-                    getViewState().showTranslatedText(translation.getTranslatedText());
-                }
-
-                @Override
-                public void onNotAvailable() {
-                    Timber.e("Translate failed");
-                }
-            });
+            translate();
         }
+    }
+
+    private void translate() {
+        final Translation translation = translatePresenterCache.getTranslation();
+        translateRepository.translate(translation, new TranslateDataSource.ResultCallback<Translation>() {
+            @Override
+            public void onLoaded(Translation result) {
+                translatePresenterCache.updateData(translation);
+                getViewState().showTranslatedText(translation.getTranslatedText());
+            }
+
+            @Override
+            public void onNotAvailable() {
+                Timber.e("Translate failed");
+            }
+        });
+    }
+
+    @Override
+    public void swapLanguages() {
+        translatePresenterCache.swapLanguages();
+        translate();
+        String sourceLanguage = translatePresenterCache.getTranslation().getSourceLanguage().getDescription();
+        String destinationLanguage = translatePresenterCache.getTranslation().getDestinationLanguage().getDescription();
+        getViewState().showSourceLanguage(sourceLanguage);
+        getViewState().showDestinationLanguage(destinationLanguage);
     }
 
     private void clearTexts() {
@@ -87,4 +101,6 @@ public class TranslatePresenter extends MvpPresenter<ITranslateView> implements 
         translatePresenterCache.updateTranslatedText(null);
         getViewState().showTranslatedText(null);
     }
+
+
 }

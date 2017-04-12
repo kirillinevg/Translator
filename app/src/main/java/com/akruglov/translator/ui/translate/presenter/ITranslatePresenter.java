@@ -6,4 +6,5 @@ package com.akruglov.translator.ui.translate.presenter;
 
 public interface ITranslatePresenter {
     void updateSourceText(String sourceText);
+    void swapLanguages();
 }
