@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.akruglov.translator.data.TranslateDataSource;
 import com.akruglov.translator.data.TranslateRepository;
 import com.akruglov.translator.data.models.Translation;
-import com.akruglov.translator.ui.translate.view.ITranslateView;
+import com.akruglov.translator.ui.translate.view.TranslateView;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
@@ -16,7 +16,7 @@ import timber.log.Timber;
  */
 
 @InjectViewState
-public class TranslatePresenter extends MvpPresenter<ITranslateView> implements ITranslatePresenter {
+public class TranslatePresenter extends MvpPresenter<TranslateView> {
 
     private TranslatePresenterCache translatePresenterCache;
     private TranslateRepository translateRepository;
@@ -60,7 +60,6 @@ public class TranslatePresenter extends MvpPresenter<ITranslateView> implements 
         getViewState().showTranslatedText(translation.getTranslatedText());
     }
 
-    @Override
     public void updateSourceText(String sourceText) {
         if (sourceText == null || sourceText.isEmpty()) {
             clearTexts();
@@ -86,7 +85,6 @@ public class TranslatePresenter extends MvpPresenter<ITranslateView> implements 
         });
     }
 
-    @Override
     public void swapLanguages() {
         translatePresenterCache.swapLanguages();
         translate();

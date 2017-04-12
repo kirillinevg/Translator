@@ -13,7 +13,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.akruglov.translator.R;
-import com.akruglov.translator.data.models.Language;
 import com.akruglov.translator.injection.Injection;
 import com.akruglov.translator.ui.translate.presenter.TranslatePresenter;
 import com.akruglov.translator.ui.translate.presenter.TranslatePresenterCache;
@@ -25,7 +24,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
  * Fragment for translation page of main view pager.
  */
 
-public class TranslateFragment extends MvpAppCompatFragment implements ITranslateView {
+public class TranslateFragment extends MvpAppCompatFragment implements TranslateView {
 
     private TextView sourceLanguageTextView;
     private TextView destinationLanguageTextView;

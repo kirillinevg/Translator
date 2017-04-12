@@ -3,8 +3,8 @@ package com.akruglov.translator.ui.translate.presenter;
 import com.akruglov.translator.data.TranslateRepository;
 import com.akruglov.translator.data.models.Language;
 import com.akruglov.translator.data.models.Translation;
-import com.akruglov.translator.ui.translate.view.ITranslateView;
-import com.akruglov.translator.ui.translate.view.ITranslateView$$State;
+import com.akruglov.translator.ui.translate.view.TranslateView;
+import com.akruglov.translator.ui.translate.view.TranslateView$$State;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,10 +24,10 @@ import static org.mockito.Mockito.when;
 public final class TranslatePresenterTest {
 
     @Mock
-    ITranslateView translateView;
+    TranslateView translateView;
 
     @Mock
-    ITranslateView$$State translateViewState;
+    TranslateView$$State translateViewState;
 
     @Mock
     TranslatePresenterCache translatePresenterCache;

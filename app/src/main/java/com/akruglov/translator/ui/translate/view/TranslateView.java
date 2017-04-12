@@ -10,7 +10,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
  */
 
 @StateStrategyType(AddToEndSingleStrategy.class)
-public interface ITranslateView extends MvpView {
+public interface TranslateView extends MvpView {
 
     void showSourceLanguage(String language);
     void showDestinationLanguage(String language);
