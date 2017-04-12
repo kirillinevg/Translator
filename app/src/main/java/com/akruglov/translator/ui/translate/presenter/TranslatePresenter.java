@@ -1,6 +1,7 @@
 package com.akruglov.translator.ui.translate.presenter;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.akruglov.translator.data.TranslateDataSource;
 import com.akruglov.translator.data.TranslateRepository;
@@ -71,6 +72,9 @@ public class TranslatePresenter extends MvpPresenter<TranslateView> {
     }
 
     private void translate() {
+        if (TextUtils.isEmpty(translatePresenterCache.getSourceText())) {
+            return;
+        }
         final Translation translation = translatePresenterCache.getTranslation();
         translateRepository.translate(translation, new TranslateDataSource.ResultCallback<Translation>() {
             @Override

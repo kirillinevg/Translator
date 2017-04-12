@@ -53,4 +53,8 @@ public class TranslatePresenterCache {
     public void setDestinationLanguage(Language language) {
         translation.setDestinationLanguage(language);
     }
+
+    public String getSourceText() {
+        return translation.getSourceText();
+    }
 }
