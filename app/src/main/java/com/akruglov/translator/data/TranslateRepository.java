@@ -204,7 +204,8 @@ public class TranslateRepository implements TranslateDataSource {
                 getDefaultSourceLanguage(),
                 getDefaultDestinationLanguage(),
                 null, // source text
-                null  // translated text
+                null,  // translated text,
+                false // is not favorite
         );
     }
 }

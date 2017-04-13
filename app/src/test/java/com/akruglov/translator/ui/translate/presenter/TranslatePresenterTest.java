@@ -46,7 +46,7 @@ public final class TranslatePresenterTest {
         presenter.setViewState(translateViewState);
 
         translation = new Translation(-1, new Language(0, "ru", "Русский"),
-                new Language(1, "it", "Итальянский"), "Ребенок", "Bambino");
+                new Language(1, "it", "Итальянский"), "Ребенок", "Bambino", false);
     }
 
     @Test

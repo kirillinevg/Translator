@@ -2,6 +2,7 @@ package com.akruglov.translator.ui.translate.presenter;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.akruglov.translator.data.TranslateDataSource;
 import com.akruglov.translator.data.TranslateRepository;
@@ -28,17 +29,20 @@ public class TranslatePresenter extends MvpPresenter<TranslateView> {
         this.translatePresenterCache = translatePresenterCache;
         this.translateRepository = translateRepository;
         Timber.tag("TranslatePresenter");
+        Log.d("TRANPRES", "Ctor");
     }
 
     public void init() {
-        if (translatePresenterCache.isCacheExists()) {
-            setTranslateInfoToView(translatePresenterCache.getTranslation());
-        } else {
+        Log.d("TRANPRES", "Init called");
+//        if (translatePresenterCache.isCacheExists()) {
+//            setTranslateInfoToView(translatePresenterCache.getTranslation());
+//        } else {
             loadLastTranslation();
-        };
+//        };
     }
 
     private void loadLastTranslation() {
+        Log.d("TRANPRES", "loadLastTranslation");
         translateRepository.getLastTranslation(new TranslateDataSource.ResultCallback<Translation>() {
 
             @Override
@@ -103,6 +107,7 @@ public class TranslatePresenter extends MvpPresenter<TranslateView> {
         translatePresenterCache.updateSourceText(null);
         translatePresenterCache.updateTranslatedText(null);
         getViewState().showTranslatedText(null);
+        getViewState().showSourceText(null);
     }
 
 

@@ -16,17 +16,20 @@ public class Translation {
     private Language destinationLanguage;
     private String sourceText;
     private String translatedText;
+    private boolean isFavorite;
 
     public Translation(int id,
                        @NonNull Language sourceLanguage,
                        @NonNull Language destinationLanguage,
                        String sourceText,
-                       String translatedText) {
+                       String translatedText,
+                       boolean isFavorite) {
         this.id = id;
         this.sourceLanguage = sourceLanguage;
         this.destinationLanguage = destinationLanguage;
         this.sourceText = sourceText;
         this.translatedText = translatedText;
+        this.isFavorite = isFavorite;
     }
 
     public int getId() {
@@ -67,5 +70,13 @@ public class Translation {
 
     public void setTranslatedText(String translatedText) {
         this.translatedText = translatedText;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }

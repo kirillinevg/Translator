@@ -79,7 +79,7 @@ public class DbLab implements DbContract {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c = db.query(
                 HISTORY,
-                new String[] { History.ID, History.TRANSLATED_TEXT },
+                new String[] { History.ID, History.TRANSLATED_TEXT, History.IS_FAVORITE },
                 History.SOURCE_LANG_ID + "= ? AND " +
                 History.DEST_LANG_ID + " = ? AND " +
                 History.SOURCE_TEXT + " = ?",
@@ -95,6 +95,7 @@ public class DbLab implements DbContract {
         if (c != null && (c.isFirst() || c.moveToFirst())) {
             translation.setId(c.getInt(0));
             translation.setTranslatedText(c.getString(1));
+            translation.setFavorite(c.getInt(2) == 1);
             closeCursor(c);
             return translation;
         } else {
@@ -110,7 +111,9 @@ public class DbLab implements DbContract {
         values.put(History.DEST_LANG_ID, translation.getDestinationLanguage().getId());
         values.put(History.SOURCE_TEXT, translation.getSourceText());
         values.put(History.TRANSLATED_TEXT, translation.getTranslatedText());
+        values.put(History.IS_FAVORITE, 0);
         translation.setId((int)db.insert(HISTORY, null, values));
+        translation.setFavorite(false);
         return translation;
     }
 }

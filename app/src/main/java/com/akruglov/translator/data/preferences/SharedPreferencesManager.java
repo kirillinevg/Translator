@@ -27,6 +27,7 @@ public final class SharedPreferencesManager {
     private static final String PREF_DEST_LANG_KEY = "dest.lang.key";
     private static final String PREF_DEST_LANG_DESCRIPTION = "dest.lang.description";
 
+    private static final String PREF_IS_FAVORITE = "is.favorite";
 
     private SharedPreferences sharedPreferences;
 
@@ -63,7 +64,8 @@ public final class SharedPreferencesManager {
                         sharedPreferences.getString(PREF_DEST_LANG_DESCRIPTION, "")
                 ),
                 sharedPreferences.getString(PREF_SOURCE_TEXT, ""),
-                sharedPreferences.getString(PREF_TRANSLATED_TEXT, "")
+                sharedPreferences.getString(PREF_TRANSLATED_TEXT, ""),
+                sharedPreferences.getBoolean(PREF_IS_FAVORITE, false)
         );
     }
 
@@ -78,6 +80,7 @@ public final class SharedPreferencesManager {
         editor.putString(PREF_DEST_LANG_DESCRIPTION, translation.getDestinationLanguage().getDescription());
         editor.putString(PREF_SOURCE_TEXT, translation.getSourceText());
         editor.putString(PREF_TRANSLATED_TEXT, translation.getTranslatedText());
+        editor.putBoolean(PREF_IS_FAVORITE, translation.isFavorite());
         editor.apply();
     }
 }

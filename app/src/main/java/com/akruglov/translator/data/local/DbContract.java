@@ -21,5 +21,6 @@ public interface DbContract {
         String DEST_LANG_ID = "histrory_dest_lang_id";
         String SOURCE_TEXT = "history_source_text";
         String TRANSLATED_TEXT = "history_translated_text";
+        String IS_FAVORITE = "history_is_favorite";
     }
 }
