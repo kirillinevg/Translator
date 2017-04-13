@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/favorite_image_view"
+        app:srcCompat="@drawable/ic_bookmark_grey_24dp"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/direction_text"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:textAllCaps="true"
+        tools:text="EN-RU"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/source_text"
+        android:layout_toRightOf="@id/favorite_image_view"
+        android:layout_toLeftOf="@id/direction_text"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        tools:text="Source text dddd"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/translated_text"
+        android:layout_toRightOf="@id/favorite_image_view"
+        android:layout_below="@id/source_text"
+        android:layout_toLeftOf="@id/direction_text"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        tools:text="Translated text jjkjljlkjlkjlkjlkjljlkjkkkkkkkkkkkkkkkkkkkkkkkkkkkk"/>
+
+</RelativeLayout>

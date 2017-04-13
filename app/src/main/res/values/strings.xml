@@ -8,4 +8,6 @@
     <string name="choose_dest_lang_title">Translation language</string>
     <string name="history_tab_title">History</string>
     <string name="favorites_tab_title">Favorites</string>
+    <string name="default_destination_language">Russian</string>
+    <string name="default_source_language">English</string>
 </resources>
