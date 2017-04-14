@@ -29,20 +29,17 @@ public class TranslatePresenter extends MvpPresenter<TranslateView> {
         this.translatePresenterCache = translatePresenterCache;
         this.translateRepository = translateRepository;
         Timber.tag("TranslatePresenter");
-        Log.d("TRANPRES", "Ctor");
     }
 
     public void init() {
-        Log.d("TRANPRES", "Init called");
-//        if (translatePresenterCache.isCacheExists()) {
-//            setTranslateInfoToView(translatePresenterCache.getTranslation());
-//        } else {
+        // After configuration changes view will be restored from ViewState,
+        // so we must care only about first initialization
+        if (!translatePresenterCache.isCacheExists()) {
             loadLastTranslation();
-//        };
+        };
     }
 
     private void loadLastTranslation() {
-        Log.d("TRANPRES", "loadLastTranslation");
         translateRepository.getLastTranslation(new TranslateDataSource.ResultCallback<Translation>() {
 
             @Override
@@ -71,6 +68,7 @@ public class TranslatePresenter extends MvpPresenter<TranslateView> {
             clearTexts();
         } else {
             translatePresenterCache.updateSourceText(sourceText);
+            getViewState().showSourceText(sourceText); // for restore in case of conf changes
             translate();
         }
     }

@@ -1,6 +1,7 @@
 package com.akruglov.translator.data;
 
 import android.support.annotation.NonNull;
+import android.util.SparseArray;
 
 import com.akruglov.translator.data.local.TranslateLocalDataSource;
 import com.akruglov.translator.data.models.Language;
@@ -24,6 +25,7 @@ public class TranslateRepository implements TranslateDataSource {
     private final SharedPreferencesManager sharedPreferencesManager;
 
     private List<Language> languageCache;
+    private SparseArray<Language> languageCacheMap = new SparseArray<>();
 
     private TranslateRepository(@NonNull TranslateRemoteDataSource translateRemoteDataSource,
                                 @NonNull TranslateLocalDataSource translateLocalDataSource,
@@ -75,6 +77,11 @@ public class TranslateRepository implements TranslateDataSource {
         });
     }
 
+    public Language getLanguageById(int languageId) {
+        // Languages are already in cache
+        return getLanguageFromCacheById(languageId);
+    }
+
     public void getLanguages(final ResultCallback<List<Language>> callback) {
         if (languageCache != null) {
             callback.onLoaded(languageCache);
@@ -83,9 +90,19 @@ public class TranslateRepository implements TranslateDataSource {
         }
     }
 
-    public Language getLanguageById(int languageId) {
-        // Languages are already in cache
-        return getLanguageFromCacheById(languageId);
+    public void loadHistory(final ResultCallback<List<Translation>> callback) {
+        translateLocalDataSource.loadHistory(languageCacheMap, new ResultCallback<List<Translation>>() {
+
+            @Override
+            public void onLoaded(List<Translation> result) {
+                callback.onLoaded(result);
+            }
+
+            @Override
+            public void onNotAvailable() {
+                callback.onNotAvailable();
+            }
+        });
     }
 
     private void getLanguagesFromLocal(final ResultCallback<List<Language>> callback) {
@@ -196,6 +213,9 @@ public class TranslateRepository implements TranslateDataSource {
 
     private void saveLanguagesToCache(List<Language> languages) {
         languageCache = languages;
+        for (Language language : languages) {
+            languageCacheMap.append(language.getId(), language);
+        }
     }
 
     private Translation getDefaultTransaltion() {

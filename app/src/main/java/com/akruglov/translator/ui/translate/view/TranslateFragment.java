@@ -48,13 +48,6 @@ public class TranslateFragment extends MvpAppCompatFragment implements Translate
                 Injection.provideTranslateRepositiory(getActivity().getApplicationContext()));
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        translatePresenter.init();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -129,6 +122,8 @@ public class TranslateFragment extends MvpAppCompatFragment implements Translate
         });
 
         translatedTextView = (TextView) view.findViewById(R.id.translated_text);
+
+        translatePresenter.init();
 
         return view;
     }

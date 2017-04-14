@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.util.SparseArray;
 
 import com.akruglov.translator.data.TranslateDataSource;
 import com.akruglov.translator.data.models.Language;
@@ -101,6 +102,25 @@ public class TranslateLocalDataSource implements TranslateDataSource {
                     @Override
                     public void run() {
                         callback.onLoaded(updatedTranslation);
+                    }
+                });
+            }
+        });
+    }
+
+    public void loadHistory(final SparseArray<Language> languages, final ResultCallback<List<Translation>> callback) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                final List<Translation> translations = dbLab.getTranslations(languages);
+                uiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (translations != null && !translations.isEmpty()) {
+                            callback.onLoaded(translations);
+                        } else {
+                            callback.onNotAvailable();
+                        }
                     }
                 });
             }

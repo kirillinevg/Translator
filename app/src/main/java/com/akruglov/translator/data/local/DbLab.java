@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.SparseArray;
 
 import com.akruglov.translator.data.models.Language;
 import com.akruglov.translator.data.models.Translation;
@@ -29,7 +30,7 @@ public class DbLab implements DbContract {
 
     List<Language> getLanguages() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String tables = LANGUAGES;
+
         String orderBy = Languages.DESCRIPTION + " ASC";
 
         Cursor c = db.query(LANGUAGES,
@@ -115,5 +116,39 @@ public class DbLab implements DbContract {
         translation.setId((int)db.insert(HISTORY, null, values));
         translation.setFavorite(false);
         return translation;
+    }
+
+    public List<Translation> getTranslations(SparseArray<Language> languages) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String orderBy = History.ID + " DESC";
+
+        Cursor c = db.query(HISTORY,
+                null,
+                null,
+                null,
+                null,
+                null,
+                orderBy,
+                null);
+
+        if (c != null && (c.isFirst() || c.moveToFirst())) {
+            List<Translation> translations = new ArrayList<>();
+            do {
+                Translation translation = new Translation(
+                        c.getInt(c.getColumnIndex(History.ID)),
+                        languages.get(c.getInt(c.getColumnIndex(History.SOURCE_LANG_ID))),
+                        languages.get(c.getInt(c.getColumnIndex(History.DEST_LANG_ID))),
+                        c.getString(c.getColumnIndex(History.SOURCE_TEXT)),
+                        c.getString(c.getColumnIndex(History.TRANSLATED_TEXT)),
+                        c.getInt(c.getColumnIndex(History.IS_FAVORITE)) == 1
+                );
+                translations.add(translation);
+            } while (c.moveToNext());
+            closeCursor(c);
+            return translations;
+        }
+        closeCursor(c);
+        return null;
     }
 }

@@ -20,6 +20,7 @@ public class BookmarksFragment extends Fragment {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private TitledViewPagerAdapter adapter;
 
     @Nullable
     @Override
@@ -38,9 +39,24 @@ public class BookmarksFragment extends Fragment {
     }
 
     private void setupViewPager() {
-        TitledViewPagerAdapter adapter = new TitledViewPagerAdapter(getActivity().getSupportFragmentManager());
+        adapter = new TitledViewPagerAdapter(getActivity().getSupportFragmentManager());
         adapter.addFragment(new HistoryFragment(), getString(R.string.history_tab_title));
         adapter.addFragment(new FavoritesFragment(), getString(R.string.favorites_tab_title));
         viewPager.setAdapter(adapter);
+    }
+
+    /**
+     * Method is overrided for detecting a moment when fragment
+     * becomes visible by selecting its tab in BottomNavigationBar.
+     * @param menuVisible
+     */
+    @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (menuVisible && isResumed()) {
+            if (viewPager.getCurrentItem() == 0) {
+                ((HistoryFragment)adapter.getItem(0)).onBecomeVisible();
+            }
+        }
     }
 }
