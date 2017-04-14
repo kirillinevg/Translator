@@ -22,6 +22,7 @@ import com.akruglov.translator.injection.Injection;
 import com.akruglov.translator.ui.bookmarks.presenter.HistoryPresenter;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.PresenterType;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import java.util.ArrayList;
@@ -100,10 +101,10 @@ public class HistoryFragment extends MvpAppCompatFragment implements HistoryView
     private RecyclerView translationRecycleView;
     private TranslationAdapter translationAdapter;
 
-    @InjectPresenter
+    @InjectPresenter(type= PresenterType.GLOBAL, tag="HistoryPresenter")
     HistoryPresenter historyPresenter;
 
-    @ProvidePresenter
+    @ProvidePresenter(type=PresenterType.GLOBAL, tag="HistoryPresenter")
     HistoryPresenter provideHistoryPresenter() {
         return new HistoryPresenter(
                 Injection.provideTranslateRepositiory(getActivity().getApplicationContext()));

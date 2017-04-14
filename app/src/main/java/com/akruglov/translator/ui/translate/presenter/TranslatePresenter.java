@@ -32,10 +32,10 @@ public class TranslatePresenter extends MvpPresenter<TranslateView> {
     }
 
     public void init() {
-        // After configuration changes view will be restored from ViewState,
-        // so we must care only about first initialization
         if (!translatePresenterCache.isCacheExists()) {
             loadLastTranslation();
+        } else {
+            setTranslateInfoToView(translatePresenterCache.getTranslation());
         };
     }
 
@@ -68,7 +68,6 @@ public class TranslatePresenter extends MvpPresenter<TranslateView> {
             clearTexts();
         } else {
             translatePresenterCache.updateSourceText(sourceText);
-            getViewState().showSourceText(sourceText); // for restore in case of conf changes
             translate();
         }
     }

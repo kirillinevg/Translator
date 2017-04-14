@@ -43,6 +43,12 @@ public class HistoryPresenter extends MvpPresenter<HistoryView> {
         }
     }
 
+    @Override
+    protected void onFirstViewAttach() {
+        super.onFirstViewAttach();
+        Log.i("HISPRES", "onFirstViewAttach");
+    }
+
     private void loadHistory() {
 
         Log.d("HISPRES", "loadHistory");

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +56,14 @@ public class BookmarksFragment extends Fragment {
         super.setMenuVisibility(menuVisible);
         if (menuVisible && isResumed()) {
             if (viewPager.getCurrentItem() == 0) {
-                ((HistoryFragment)adapter.getItem(0)).onBecomeVisible();
+                Log.i("BookmarkFragment", "onMenuVisibility");
+                HistoryFragment historyFragment = (HistoryFragment)adapter.getItem(0);
+                if (historyFragment.isAdded()) {
+                    // After configuration changes the fragment will be not added yet,
+                    // so we don't need to initialize its presenter
+                    // (presenter already initialized)
+                    historyFragment.onBecomeVisible();
+                }
             }
         }
     }
