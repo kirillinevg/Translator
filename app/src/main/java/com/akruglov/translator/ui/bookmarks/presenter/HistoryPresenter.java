@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.akruglov.translator.data.TranslateDataSource;
+import com.akruglov.translator.data.TranslateNotificationManager;
 import com.akruglov.translator.data.TranslateRepository;
 import com.akruglov.translator.data.models.Language;
 import com.akruglov.translator.data.models.Translation;
@@ -22,15 +23,18 @@ import timber.log.Timber;
  */
 
 @InjectViewState
-public class HistoryPresenter extends MvpPresenter<HistoryView> {
+public class HistoryPresenter extends MvpPresenter<HistoryView> implements TranslateNotificationManager.TranslationListener {
 
     //private List<Language> languages;
     private List<Translation> translations;
 
     private TranslateRepository translateRepository;
+    private TranslateNotificationManager notificationManager;
 
-    public HistoryPresenter(@NonNull TranslateRepository translateRepository) {
+    public HistoryPresenter(@NonNull TranslateRepository translateRepository,
+                            @NonNull TranslateNotificationManager notificationManager) {
         this.translateRepository = translateRepository;
+        this.notificationManager = notificationManager;
         Timber.tag("HistoryPresenter");
     }
 
@@ -39,14 +43,8 @@ public class HistoryPresenter extends MvpPresenter<HistoryView> {
         // so we must care only about first initialization
         if (/*languages == null && */translations == null) {
             loadHistory();
-
+            notificationManager.addListener(this);
         }
-    }
-
-    @Override
-    protected void onFirstViewAttach() {
-        super.onFirstViewAttach();
-        Log.i("HISPRES", "onFirstViewAttach");
     }
 
     private void loadHistory() {
@@ -84,5 +82,16 @@ public class HistoryPresenter extends MvpPresenter<HistoryView> {
         });
 
         //getViewState().showHistory(translations);
+    }
+
+    @Override
+    public void onInsert(Translation translation) {
+        getViewState().insertTranslation(translation);
+    }
+
+    @Override
+    public void onDestroy() {
+        notificationManager.removeListener(this);
+        super.onDestroy();
     }
 }

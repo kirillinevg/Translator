@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
 import com.akruglov.translator.data.TranslateDataSource;
+import com.akruglov.translator.data.TranslateNotificationManager;
 import com.akruglov.translator.data.models.Language;
 import com.akruglov.translator.data.models.Translation;
 
@@ -25,17 +26,21 @@ public class TranslateLocalDataSource implements TranslateDataSource {
     private static TranslateLocalDataSource INSTANCE;
 
     private DbLab dbLab;
+    private TranslateNotificationManager notificationManager;
     private CustomExecutor executor;
     private final Handler uiHandler = new Handler(Looper.getMainLooper());
 
-    private TranslateLocalDataSource(@NonNull Context context) {
+    private TranslateLocalDataSource(@NonNull Context context,
+                                     @NonNull TranslateNotificationManager notificationManager) {
         dbLab = new DbLab(context);
+        this.notificationManager = notificationManager;
         executor = new CustomExecutor();
     }
 
-    public static TranslateLocalDataSource getInstance(@NonNull Context context) {
+    public static TranslateLocalDataSource getInstance(@NonNull Context context,
+                                                       @NonNull TranslateNotificationManager notificationManager) {
         if (INSTANCE == null) {
-            INSTANCE = new TranslateLocalDataSource(context);
+            INSTANCE = new TranslateLocalDataSource(context, notificationManager);
         }
         return INSTANCE;
     }
@@ -104,6 +109,7 @@ public class TranslateLocalDataSource implements TranslateDataSource {
                         callback.onLoaded(updatedTranslation);
                     }
                 });
+                notificationManager.notifyTranslationInserted(new Translation(updatedTranslation));
             }
         });
     }

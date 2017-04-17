@@ -9,9 +9,6 @@ import android.support.annotation.NonNull;
 public class Translation {
 
     private int id;
-
-
-
     private Language sourceLanguage;
     private Language destinationLanguage;
     private String sourceText;
@@ -30,6 +27,15 @@ public class Translation {
         this.sourceText = sourceText;
         this.translatedText = translatedText;
         this.isFavorite = isFavorite;
+    }
+
+    public Translation(Translation other) {
+        this(other.getId(),
+             other.getSourceLanguage(),
+             other.getDestinationLanguage(),
+             other.getSourceText(),
+             other.getTranslatedText(),
+             other.isFavorite());
     }
 
     public int getId() {

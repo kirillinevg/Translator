@@ -78,6 +78,11 @@ public class HistoryFragment extends MvpAppCompatFragment implements HistoryView
             this.translations = translations;
         }
 
+        public void insertTranslation(Translation translation) {
+            translations.add(0, translation);
+            notifyItemInserted(0);
+        }
+
 
         @Override
         public TranslationHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -107,7 +112,8 @@ public class HistoryFragment extends MvpAppCompatFragment implements HistoryView
     @ProvidePresenter(type=PresenterType.GLOBAL, tag="HistoryPresenter")
     HistoryPresenter provideHistoryPresenter() {
         return new HistoryPresenter(
-                Injection.provideTranslateRepositiory(getActivity().getApplicationContext()));
+                Injection.provideTranslateRepositiory(getActivity().getApplicationContext()),
+                Injection.provideTranslationNotificationManager());
     }
 
     @Nullable
@@ -144,5 +150,11 @@ public class HistoryFragment extends MvpAppCompatFragment implements HistoryView
         // after configuration changes
         translationAdapter = new TranslationAdapter(translations);
         translationRecycleView.setAdapter(translationAdapter);
+    }
+
+    @Override
+    public void insertTranslation(Translation translation) {
+        translationAdapter.insertTranslation(translation);
+        translationRecycleView.scrollToPosition(0);
     }
 }
