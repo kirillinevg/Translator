@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.akruglov.translator.R;
+import com.akruglov.translator.data.models.Translation;
 import com.akruglov.translator.ui.adapters.ViewPagerAdapter;
 import com.akruglov.translator.ui.bookmarks.view.BookmarksFragment;
 import com.akruglov.translator.ui.translate.view.TranslateFragment;
@@ -15,6 +16,7 @@ import com.akruglov.translator.ui.translate.view.TranslateFragment;
 public class StartActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
+    private ViewPagerAdapter adapter;
     private MenuItem prevMenuItem;
     private BottomNavigationView bottomNavigationView;
 
@@ -81,15 +83,25 @@ public class StartActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (viewPager.getCurrentItem() != 0) {
-            onPageChangeListener.onPageSelected(0);
-            viewPager.setCurrentItem(0);
+            navigateToTranslatePage();
         } else {
             super.onBackPressed();
         }
     }
 
+    public void navigateToTranslatePage(Translation translation) {
+        TranslateFragment fragment = (TranslateFragment) adapter.getItem(0);
+        fragment.showTranslation(translation);
+        navigateToTranslatePage();
+    }
+
+    private void navigateToTranslatePage() {
+        onPageChangeListener.onPageSelected(0);
+        viewPager.setCurrentItem(0);
+    }
+
     private void setupViewPager() {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new TranslateFragment());
         adapter.addFragment(new BookmarksFragment());
         viewPager.setAdapter(adapter);

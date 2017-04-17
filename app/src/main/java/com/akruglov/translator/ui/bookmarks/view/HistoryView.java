@@ -18,4 +18,7 @@ public interface HistoryView extends MvpView {
 
     @StateStrategyType(SkipStrategy.class)
     void insertTranslation(Translation translation);
+
+    @StateStrategyType(SkipStrategy.class)
+    void showTranslationDetails(Translation translation);
 }

@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.akruglov.translator.R;
+import com.akruglov.translator.data.models.Translation;
 import com.akruglov.translator.injection.Injection;
 import com.akruglov.translator.ui.chooselanguage.view.ChooseLanguageActivity;
 import com.akruglov.translator.ui.translate.presenter.TranslatePresenter;
@@ -183,5 +184,13 @@ public class TranslateFragment extends MvpAppCompatFragment implements Translate
             int newDestinationLanguageId = ChooseLanguageActivity.getLanguageId(data);
             translatePresenter.selectDestinatonLanguage(newDestinationLanguageId);
         }
+    }
+
+    /**
+     * Show translation from history or favorites
+     * @param translation translation to show
+     */
+    public void showTranslation(Translation translation) {
+        translatePresenter.showTranslation(translation);
     }
 }

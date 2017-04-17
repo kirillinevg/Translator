@@ -94,4 +94,9 @@ public class HistoryPresenter extends MvpPresenter<HistoryView> implements Trans
         notificationManager.removeListener(this);
         super.onDestroy();
     }
+
+    public void showTranslationDetails(Translation translation) {
+        Translation copy = new Translation(translation);
+        getViewState().showTranslationDetails(copy);
+    }
 }

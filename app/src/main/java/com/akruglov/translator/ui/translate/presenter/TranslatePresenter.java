@@ -133,4 +133,13 @@ public class TranslatePresenter extends MvpPresenter<TranslateView> {
             translate();
         }
     }
+
+    /**
+     * Show translation from history or favorites
+     * @param translation translation to show
+     */
+    public void showTranslation(Translation translation) {
+        translatePresenterCache.setTranslation(translation);
+        setTranslateInfoToView(translation);
+    }
 }

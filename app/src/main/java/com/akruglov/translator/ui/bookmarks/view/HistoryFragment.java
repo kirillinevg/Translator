@@ -19,6 +19,7 @@ import com.akruglov.translator.R;
 import com.akruglov.translator.data.models.Language;
 import com.akruglov.translator.data.models.Translation;
 import com.akruglov.translator.injection.Injection;
+import com.akruglov.translator.ui.StartActivity;
 import com.akruglov.translator.ui.bookmarks.presenter.HistoryPresenter;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -45,9 +46,12 @@ public class HistoryFragment extends MvpAppCompatFragment implements HistoryView
         final Drawable isNotFavoriteDrawable;
 
         private Translation translation;
+        private HistoryPresenter presenter;
 
-        public TranslationHolder(View itemView) {
+        public TranslationHolder(View itemView, final HistoryPresenter presenter) {
             super(itemView);
+
+            this.presenter = presenter;
 
             Resources resources = itemView.getContext().getResources();
             isFavoriteDrawable = resources.getDrawable(R.drawable.ic_bookmark_green_24dp);
@@ -57,6 +61,13 @@ public class HistoryFragment extends MvpAppCompatFragment implements HistoryView
             translatedTextView = (TextView) itemView.findViewById(R.id.translated_text);
             directionTextView = (TextView) itemView.findViewById(R.id.direction_text);
             favoriteImageView = (ImageView) itemView.findViewById(R.id.favorite_image_view);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    presenter.showTranslationDetails(translation);
+                }
+            });
         }
 
         public void bind(Translation translation) {
@@ -73,9 +84,11 @@ public class HistoryFragment extends MvpAppCompatFragment implements HistoryView
     private static class TranslationAdapter extends RecyclerView.Adapter<TranslationHolder> {
 
         private List<Translation> translations;
+        private HistoryPresenter presenter;
 
-        public TranslationAdapter(List<Translation> translations) {
+        public TranslationAdapter(List<Translation> translations, HistoryPresenter presenter) {
             this.translations = translations;
+            this.presenter = presenter;
         }
 
         public void insertTranslation(Translation translation) {
@@ -88,7 +101,7 @@ public class HistoryFragment extends MvpAppCompatFragment implements HistoryView
         public TranslationHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
             View view = layoutInflater.inflate(R.layout.list_item_translation, parent, false);
-            return new TranslationHolder(view);
+            return new TranslationHolder(view, presenter);
         }
 
         @Override
@@ -148,7 +161,7 @@ public class HistoryFragment extends MvpAppCompatFragment implements HistoryView
     public void showHistory(List<Translation> translations) {
         // Will be called only at first initialization or during recreating fragment
         // after configuration changes
-        translationAdapter = new TranslationAdapter(translations);
+        translationAdapter = new TranslationAdapter(translations, historyPresenter  );
         translationRecycleView.setAdapter(translationAdapter);
     }
 
@@ -157,4 +170,12 @@ public class HistoryFragment extends MvpAppCompatFragment implements HistoryView
         translationAdapter.insertTranslation(translation);
         translationRecycleView.scrollToPosition(0);
     }
+
+    @Override
+    public void showTranslationDetails(Translation translation) {
+        StartActivity activity = (StartActivity)getActivity();
+        activity.navigateToTranslatePage(translation);
+    }
+
+
 }
