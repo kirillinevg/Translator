@@ -36,7 +36,7 @@ public class TranslatePresenter extends MvpPresenter<TranslateView> {
             loadLastTranslation();
         } else {
             setTranslateInfoToView(translatePresenterCache.getTranslation());
-        };
+        }
     }
 
     private void loadLastTranslation() {

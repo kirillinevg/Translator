@@ -11,7 +11,12 @@ import com.akruglov.translator.R;
 import com.akruglov.translator.data.models.Translation;
 import com.akruglov.translator.ui.adapters.ViewPagerAdapter;
 import com.akruglov.translator.ui.bookmarks.view.BookmarksFragment;
+import com.akruglov.translator.ui.translate.presenter.TranslatePresenter;
 import com.akruglov.translator.ui.translate.view.TranslateFragment;
+import com.arellomobile.mvp.MvpFacade;
+import com.arellomobile.mvp.MvpPresenter;
+import com.arellomobile.mvp.PresenterStore;
+import com.arellomobile.mvp.presenter.PresenterType;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -91,8 +96,12 @@ public class StartActivity extends AppCompatActivity {
 
     public void navigateToTranslatePage(Translation translation) {
         TranslateFragment fragment = (TranslateFragment) adapter.getItem(0);
-        fragment.showTranslation(translation);
         navigateToTranslatePage();
+        PresenterStore presenterStore = MvpFacade.getInstance().getPresenterStore();
+        TranslatePresenter presenter =
+                (TranslatePresenter) presenterStore.get(PresenterType.GLOBAL,
+                        "TranslatePresenter", TranslatePresenter.class);
+        presenter.showTranslation(translation);
     }
 
     private void navigateToTranslatePage() {

@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.akruglov.translator.ui.translate.presenter.TranslatePresenter;
 import com.akruglov.translator.ui.translate.presenter.TranslatePresenterCache;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.PresenterType;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 /**
@@ -40,10 +42,10 @@ public class TranslateFragment extends MvpAppCompatFragment implements Translate
     private EditText sourceTextEditor;
     private TextView translatedTextView;
 
-    @InjectPresenter
+    @InjectPresenter(type= PresenterType.GLOBAL, tag="TranslatePresenter")
     TranslatePresenter translatePresenter;
 
-    @ProvidePresenter
+    @ProvidePresenter(type= PresenterType.GLOBAL, tag="TranslatePresenter")
     TranslatePresenter provideTranslatePresenter() {
         return new TranslatePresenter(new TranslatePresenterCache(),
                 Injection.provideTranslateRepositiory(getActivity().getApplicationContext()));
@@ -184,13 +186,5 @@ public class TranslateFragment extends MvpAppCompatFragment implements Translate
             int newDestinationLanguageId = ChooseLanguageActivity.getLanguageId(data);
             translatePresenter.selectDestinatonLanguage(newDestinationLanguageId);
         }
-    }
-
-    /**
-     * Show translation from history or favorites
-     * @param translation translation to show
-     */
-    public void showTranslation(Translation translation) {
-        translatePresenter.showTranslation(translation);
     }
 }

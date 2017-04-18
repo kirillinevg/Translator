@@ -68,6 +68,13 @@ public class HistoryFragment extends MvpAppCompatFragment implements HistoryView
                     presenter.showTranslationDetails(translation);
                 }
             });
+
+            favoriteImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("happy", "switch history-favorites");
+                }
+            });
         }
 
         public void bind(Translation translation) {
