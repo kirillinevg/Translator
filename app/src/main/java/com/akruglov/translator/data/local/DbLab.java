@@ -124,13 +124,14 @@ public class DbLab implements DbContract {
         String orderBy = History.ID + " DESC";
 
         Cursor c = db.query(HISTORY,
-                null,
-                null,
-                null,
-                null,
-                null,
+                null, // columns
+                null, // selection
+                null, // selectionArgs
+                null, // groupBy
+                null, // having
                 orderBy,
-                null);
+                null // limit
+        );
 
         if (c != null && (c.isFirst() || c.moveToFirst())) {
             List<Translation> translations = new ArrayList<>();
@@ -147,6 +148,40 @@ public class DbLab implements DbContract {
             } while (c.moveToNext());
             closeCursor(c);
             return translations;
+        }
+        closeCursor(c);
+        return null;
+    }
+
+    public List<Translation> getFavorites(SparseArray<Language> languages) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String orderBy = History.ID + " DESC";
+
+        Cursor c = db.query(HISTORY,
+                null, // columns
+                History.IS_FAVORITE + "=?",
+                new String[] { String.valueOf(1) },
+                null, // groupBy
+                null, // having
+                orderBy
+        );
+
+        if (c != null && (c.isFirst() || c.moveToFirst())) {
+            List<Translation> favorites = new ArrayList<>();
+            do {
+                Translation translation = new Translation(
+                        c.getInt(c.getColumnIndex(History.ID)),
+                        languages.get(c.getInt(c.getColumnIndex(History.SOURCE_LANG_ID))),
+                        languages.get(c.getInt(c.getColumnIndex(History.DEST_LANG_ID))),
+                        c.getString(c.getColumnIndex(History.SOURCE_TEXT)),
+                        c.getString(c.getColumnIndex(History.TRANSLATED_TEXT)),
+                        c.getInt(c.getColumnIndex(History.IS_FAVORITE)) == 1
+                );
+                favorites.add(translation);
+            } while (c.moveToNext());
+            closeCursor(c);
+            return favorites;
         }
         closeCursor(c);
         return null;

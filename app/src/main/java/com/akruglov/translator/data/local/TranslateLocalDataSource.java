@@ -142,6 +142,25 @@ public class TranslateLocalDataSource implements TranslateDataSource {
         });
     }
 
+    public void loadFavorites(final SparseArray<Language> languages, final ResultCallback<List<Translation>> callback) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                final List<Translation> favorites = dbLab.getFavorites(languages);
+                uiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (favorites != null && !favorites.isEmpty()) {
+                            callback.onLoaded(favorites);
+                        } else {
+                            callback.onNotAvailable();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
     private static class CustomExecutor extends ThreadPoolExecutor {
 
         private static final int CORE_POOL_SIZE = 3;

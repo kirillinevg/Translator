@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +27,8 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Created by akruglov on 12.04.17.
@@ -72,7 +73,7 @@ public class HistoryFragment extends MvpAppCompatFragment implements HistoryView
             favoriteImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i("happy", "switch history-favorites");
+                    Timber.i("switch history-favorites");
                     translation.setFavorite(!translation.isFavorite());
                     favoriteImageView.setImageDrawable(translation.isFavorite() ? isFavoriteDrawable : isNotFavoriteDrawable);
                     presenter.setFavorite(translation);

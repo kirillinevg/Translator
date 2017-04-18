@@ -25,7 +25,6 @@ import timber.log.Timber;
 @InjectViewState
 public class HistoryPresenter extends MvpPresenter<HistoryView> implements TranslateNotificationManager.TranslationListener {
 
-    //private List<Language> languages;
     private List<Translation> translations;
 
     private TranslateRepository translateRepository;
@@ -49,24 +48,6 @@ public class HistoryPresenter extends MvpPresenter<HistoryView> implements Trans
 
     private void loadHistory() {
 
-        Log.d("HISPRES", "loadHistory");
-
-//        languages = new ArrayList<>();
-//        translations = new ArrayList<>();
-//
-//        languages.add(new Language(1, "en", "Английский"));
-//        languages.add(new Language(2, "ru", "Русский"));
-//        languages.add(new Language(3, "fr", "Французский"));
-//        languages.add(new Language(4, "de", "Немецкий"));
-//        languages.add(new Language(5, "it", "Итальянский"));
-//        languages.add(new Language(6, "es", "Испанский"));
-//
-//        translations.add(new Translation(1, languages.get(0), languages.get(1), "father", "папа", false));
-//        translations.add(new Translation(2, languages.get(0), languages.get(1), "mother", "мама", true));
-//        translations.add(new Translation(3, languages.get(4), languages.get(1), "bambino", "ребенок", false));
-//        translations.add(new Translation(4, languages.get(0), languages.get(1),
-//                "first, last and second another time", "первый, последний и второй другой раз", false));
-
         translateRepository.loadHistory(new TranslateDataSource.ResultCallback<List<Translation>>() {
 
             @Override
@@ -80,8 +61,6 @@ public class HistoryPresenter extends MvpPresenter<HistoryView> implements Trans
                 Timber.e("LoadHistory failed");
             }
         });
-
-        //getViewState().showHistory(translations);
     }
 
     @Override

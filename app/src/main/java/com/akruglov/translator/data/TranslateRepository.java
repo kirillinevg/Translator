@@ -105,6 +105,21 @@ public class TranslateRepository implements TranslateDataSource {
         });
     }
 
+    public void loadFavorites(final ResultCallback<List<Translation>> callback) {
+        translateLocalDataSource.loadFavorites(languageCacheMap, new ResultCallback<List<Translation>>() {
+
+            @Override
+            public void onLoaded(List<Translation> result) {
+                callback.onLoaded(result);
+            }
+
+            @Override
+            public void onNotAvailable() {
+                callback.onNotAvailable();
+            }
+        });
+    }
+
     private void getLanguagesFromLocal(final ResultCallback<List<Language>> callback) {
         translateLocalDataSource.getLanguages(new ResultCallback<List<Language>>() {
 
