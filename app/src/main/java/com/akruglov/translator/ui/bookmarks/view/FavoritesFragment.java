@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.akruglov.translator.R;
 import com.akruglov.translator.data.models.Translation;
 import com.akruglov.translator.injection.Injection;
+import com.akruglov.translator.ui.StartActivity;
 import com.akruglov.translator.ui.bookmarks.presenter.FavoritesPresenter;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -174,6 +175,7 @@ public class FavoritesFragment extends MvpAppCompatFragment implements Favorites
 
     @Override
     public void showTranslationDetails(Translation translation) {
-
+        StartActivity activity = (StartActivity) getActivity();
+        activity.navigateToTranslatePage(translation);
     }
 }

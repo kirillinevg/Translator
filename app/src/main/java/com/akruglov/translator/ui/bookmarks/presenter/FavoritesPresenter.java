@@ -30,11 +30,7 @@ public class FavoritesPresenter extends MvpPresenter<FavoritesView> {
     }
 
     public void init() {
-        // After configuration changes view will be restored from ViewState,
-        // so we must care only about first initialization
-        //if (favorites == null) {
-            loadFavorites();
-        //}
+        loadFavorites();
     }
 
     private void loadFavorites() {
@@ -55,10 +51,11 @@ public class FavoritesPresenter extends MvpPresenter<FavoritesView> {
     }
 
     public void showTranslationDetails(Translation translation) {
-
+        Translation copy = new Translation(translation);
+        getViewState().showTranslationDetails(copy);
     }
 
     public void setFavorite(Translation translation) {
-
+        translateRepository.setFavorite(translation);
     }
 }
