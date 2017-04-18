@@ -111,12 +111,12 @@ public class TranslateRepository implements TranslateDataSource {
             @Override
             public void onLoaded(List<Language> result) {
                 saveLanguagesToCache(result);
-                callback.onLoaded(result);
+                if (callback != null) callback.onLoaded(result);
             }
 
             @Override
             public void onNotAvailable() {
-                callback.onNotAvailable();
+                if (callback != null) callback.onNotAvailable();
             }
         });
     }
@@ -124,10 +124,15 @@ public class TranslateRepository implements TranslateDataSource {
     public void getLastTranslation(ResultCallback<Translation> callback) {
         if (sharedPreferencesManager.isTranslateInfoExists()) {
             Translation translation = sharedPreferencesManager.getTranslation();
+            getLanguagesFromLocal(null);
             callback.onLoaded(translation);
         } else {
             makeDefaultTranslationFromLocal(callback);
         }    
+    }
+
+    public void saveLastTranslation(Translation translation) {
+        sharedPreferencesManager.saveTranslation(translation);
     }
 
     private void makeDefaultTranslationFromLocal(final ResultCallback<Translation> callback) {

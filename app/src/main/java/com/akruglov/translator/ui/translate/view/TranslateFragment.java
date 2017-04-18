@@ -187,4 +187,10 @@ public class TranslateFragment extends MvpAppCompatFragment implements Translate
             translatePresenter.selectDestinatonLanguage(newDestinationLanguageId);
         }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        translatePresenter.saveLastTranslation();
+    }
 }

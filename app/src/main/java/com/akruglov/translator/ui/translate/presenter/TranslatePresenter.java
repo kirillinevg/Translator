@@ -142,4 +142,10 @@ public class TranslatePresenter extends MvpPresenter<TranslateView> {
         translatePresenterCache.setTranslation(translation);
         setTranslateInfoToView(translation);
     }
+
+    public void saveLastTranslation() {
+        translateRepository.saveLastTranslation(translatePresenterCache.getTranslation());
+    }
+
+
 }
