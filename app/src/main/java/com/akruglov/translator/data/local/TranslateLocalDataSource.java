@@ -79,6 +79,15 @@ public class TranslateLocalDataSource implements TranslateDataSource {
         });
     }
 
+    public void setFavorite(final Translation translation) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                dbLab.setFavorite(translation);
+            }
+        });
+    }
+
     public void findTranslation(final Translation translation, final ResultCallback<Translation> callback) {
         executor.execute(new Runnable() {
             @Override

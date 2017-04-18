@@ -73,6 +73,9 @@ public class HistoryFragment extends MvpAppCompatFragment implements HistoryView
                 @Override
                 public void onClick(View v) {
                     Log.i("happy", "switch history-favorites");
+                    translation.setFavorite(!translation.isFavorite());
+                    favoriteImageView.setImageDrawable(translation.isFavorite() ? isFavoriteDrawable : isNotFavoriteDrawable);
+                    presenter.setFavorite(translation);
                 }
             });
         }

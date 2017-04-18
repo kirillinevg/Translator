@@ -99,4 +99,8 @@ public class HistoryPresenter extends MvpPresenter<HistoryView> implements Trans
         Translation copy = new Translation(translation);
         getViewState().showTranslationDetails(copy);
     }
+
+    public void setFavorite(Translation translation) {
+        translateRepository.setFavorite(translation);
+    }
 }

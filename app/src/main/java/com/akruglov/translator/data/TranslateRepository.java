@@ -121,6 +121,10 @@ public class TranslateRepository implements TranslateDataSource {
         });
     }
 
+    public void setFavorite(Translation translation) {
+        translateLocalDataSource.setFavorite(translation);
+    }
+
     public void getLastTranslation(ResultCallback<Translation> callback) {
         if (sharedPreferencesManager.isTranslateInfoExists()) {
             Translation translation = sharedPreferencesManager.getTranslation();

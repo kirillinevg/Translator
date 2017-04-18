@@ -151,4 +151,15 @@ public class DbLab implements DbContract {
         closeCursor(c);
         return null;
     }
+
+    public void setFavorite(Translation translation) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(History.IS_FAVORITE, translation.isFavorite());
+        db.update(HISTORY,
+                  values,
+                  History.ID + "=?",
+                  new String[] { String.valueOf(translation.getId()) });
+    }
 }
