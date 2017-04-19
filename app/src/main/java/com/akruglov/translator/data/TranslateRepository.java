@@ -252,4 +252,12 @@ public class TranslateRepository implements TranslateDataSource {
                 false // is not favorite
         );
     }
+
+    public void removeFromFavorites(List<Translation> favorites) {
+        translateLocalDataSource.removeFromFavorites(favorites);
+    }
+
+    public void clearTranslations() {
+        translateLocalDataSource.clearTranslations();
+    }
 }

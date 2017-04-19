@@ -11,4 +11,10 @@
     <string name="history_tab_title">История</string>
     <string name="default_source_language">Английский</string>
     <string name="default_destination_language">Русский</string>
+    <string name="favorites_title">Избранное</string>
+    <string name="history_title">История</string>
+    <string name="history_clear_question">Вы уверены, что хотите очистить историю?</string>
+    <string name="favorites_clear_question">Вы уверены, что хотите очистить избранное?</string>
+    <string name="positive_button_text">Да</string>
+    <string name="negative_button_text">Отмена</string>
 </resources>

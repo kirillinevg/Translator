@@ -108,15 +108,20 @@ public class TranslateFragment extends MvpAppCompatFragment implements Translate
 
             @Override
             public void afterTextChanged(Editable s) {
-                final String text = s.toString();
-                uiHandler.removeCallbacks(textChangedHandler);
-                textChangedHandler = new Runnable() {
-                    @Override
-                    public void run() {
-                        updateSourceText(text);
-                    }
-                };
-                uiHandler.postDelayed(textChangedHandler, 500);
+                if (sourceTextEditor.getTag() != null) {
+                    return; // Edit Text is changed by program
+                } else {
+                    // Edit Text is changed by user
+                    final String text = s.toString();
+                    uiHandler.removeCallbacks(textChangedHandler);
+                    textChangedHandler = new Runnable() {
+                        @Override
+                        public void run() {
+                            updateSourceText(text);
+                        }
+                    };
+                    uiHandler.postDelayed(textChangedHandler, 500);
+                }
             }
 
             private void updateSourceText(String text) {
@@ -143,7 +148,9 @@ public class TranslateFragment extends MvpAppCompatFragment implements Translate
 
     @Override
     public void showSourceText(String text) {
+        sourceTextEditor.setTag("prog");
         sourceTextEditor.setText(text);
+        sourceTextEditor.setTag(null);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -21,4 +22,10 @@ public interface HistoryView extends MvpView {
 
     @StateStrategyType(SkipStrategy.class)
     void showTranslationDetails(Translation translation);
+
+    @StateStrategyType(SkipStrategy.class)
+    void showClearHistoryNotification();
+
+    @StateStrategyType(SkipStrategy.class)
+    void removeFromFavorites(HashSet<Integer> removedFromFavorites);
 }

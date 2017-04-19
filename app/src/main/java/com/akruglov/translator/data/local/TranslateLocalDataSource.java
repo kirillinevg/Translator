@@ -11,6 +11,7 @@ import com.akruglov.translator.data.TranslateNotificationManager;
 import com.akruglov.translator.data.models.Language;
 import com.akruglov.translator.data.models.Translation;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -84,6 +85,11 @@ public class TranslateLocalDataSource implements TranslateDataSource {
             @Override
             public void run() {
                 dbLab.setFavorite(translation);
+                if (!translation.isFavorite()) {
+                    HashSet<Integer> removedFromFavorites = new HashSet<>();
+                    removedFromFavorites.add(translation.getId());
+                    notificationManager.notifyRemovedFromFavorites(removedFromFavorites);
+                }
             }
         });
     }
@@ -157,6 +163,25 @@ public class TranslateLocalDataSource implements TranslateDataSource {
                         }
                     }
                 });
+            }
+        });
+    }
+
+    public void removeFromFavorites(final List<Translation> favorites) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                HashSet<Integer> removedFromFavorites = dbLab.removeFromFavorites(favorites);
+                notificationManager.notifyRemovedFromFavorites(removedFromFavorites);
+            }
+        });
+    }
+
+    public void clearTranslations() {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                dbLab.clearTranslations();
             }
         });
     }

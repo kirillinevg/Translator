@@ -10,4 +10,10 @@
     <string name="favorites_tab_title">Favorites</string>
     <string name="default_destination_language">Russian</string>
     <string name="default_source_language">English</string>
+    <string name="favorites_title">Favorites</string>
+    <string name="history_title">History</string>
+    <string name="history_clear_question">Are you sure that you want to clear history?</string>
+    <string name="favorites_clear_question">Are you sure that you want to clear favorites?</string>
+    <string name="positive_button_text">OK</string>
+    <string name="negative_button_text">Cancel</string>
 </resources>

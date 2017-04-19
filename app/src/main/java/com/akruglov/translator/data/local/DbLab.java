@@ -10,6 +10,7 @@ import com.akruglov.translator.data.models.Language;
 import com.akruglov.translator.data.models.Translation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -196,5 +197,22 @@ public class DbLab implements DbContract {
                   values,
                   History.ID + "=?",
                   new String[] { String.valueOf(translation.getId()) });
+    }
+
+    public HashSet<Integer> removeFromFavorites(List<Translation> favorites) {
+        HashSet<Integer> removedFromFavorites = new HashSet<>();
+        for (Translation favorite : favorites) {
+            if (favorite.isFavorite()) {
+                favorite.setFavorite(false);
+                setFavorite(favorite);
+                removedFromFavorites.add(favorite.getId());
+            }
+        }
+        return removedFromFavorites;
+    }
+
+    public void clearTranslations() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.delete(HISTORY, null, null);
     }
 }

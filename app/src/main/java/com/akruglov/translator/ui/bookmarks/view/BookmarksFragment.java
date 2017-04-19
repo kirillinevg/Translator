@@ -9,9 +9,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.akruglov.translator.R;
 import com.akruglov.translator.ui.adapters.TitledViewPagerAdapter;
+import com.akruglov.translator.ui.bookmarks.presenter.FavoritesPresenter;
+import com.akruglov.translator.ui.bookmarks.presenter.HistoryPresenter;
+import com.arellomobile.mvp.MvpFacade;
+import com.arellomobile.mvp.PresenterStore;
+import com.arellomobile.mvp.presenter.PresenterType;
 
 /**
  * Created by akruglov on 12.04.17.
@@ -22,6 +28,7 @@ public class BookmarksFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private TitledViewPagerAdapter adapter;
+    private ImageButton clearBookmarksButton;
 
     @Nullable
     @Override
@@ -35,6 +42,26 @@ public class BookmarksFragment extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
 
         setupViewPager();
+
+        clearBookmarksButton = (ImageButton) view.findViewById(R.id.clear_bookmarks_button);
+        clearBookmarksButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (viewPager.getCurrentItem() == 0) {
+                    PresenterStore presenterStore = MvpFacade.getInstance().getPresenterStore();
+                    HistoryPresenter presenter =
+                            (HistoryPresenter) presenterStore.get(PresenterType.GLOBAL,
+                                    "HistoryPresenter", HistoryPresenter.class);
+                    presenter.showClearHistoryNotification();
+                } else if (viewPager.getCurrentItem() == 1) {
+                    PresenterStore presenterStore = MvpFacade.getInstance().getPresenterStore();
+                    FavoritesPresenter presenter =
+                            (FavoritesPresenter) presenterStore.get(PresenterType.GLOBAL,
+                                    "FavoritesPresenter", FavoritesPresenter.class);
+                    presenter.showClearFavoritesNotification();
+                }
+            }
+        });
 
         return view;
     }

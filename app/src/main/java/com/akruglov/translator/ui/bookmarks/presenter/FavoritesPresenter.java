@@ -9,6 +9,7 @@ import com.akruglov.translator.ui.bookmarks.view.FavoritesView;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
@@ -46,6 +47,7 @@ public class FavoritesPresenter extends MvpPresenter<FavoritesView> {
             @Override
             public void onNotAvailable() {
                 Timber.e("LoadFavorites failed");
+                getViewState().showFavorites(new ArrayList<Translation>());
             }
         });
     }
@@ -57,5 +59,14 @@ public class FavoritesPresenter extends MvpPresenter<FavoritesView> {
 
     public void setFavorite(Translation translation) {
         translateRepository.setFavorite(translation);
+    }
+
+    public void showClearFavoritesNotification() {
+        getViewState().showClearFavoritesNotification();
+    }
+
+    public void clearFavorites() {
+        getViewState().clearFavorites();
+        translateRepository.removeFromFavorites(favorites);
     }
 }

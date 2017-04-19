@@ -115,5 +115,4 @@ public class StartActivity extends AppCompatActivity {
         adapter.addFragment(new BookmarksFragment());
         viewPager.setAdapter(adapter);
     }
-
 }

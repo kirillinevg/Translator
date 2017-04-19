@@ -1,5 +1,6 @@
 package com.akruglov.translator.ui.translate.presenter;
 
+import com.akruglov.translator.data.TranslateDataSource;
 import com.akruglov.translator.data.TranslateRepository;
 import com.akruglov.translator.data.models.Language;
 import com.akruglov.translator.data.models.Translation;
@@ -8,6 +9,8 @@ import com.akruglov.translator.ui.translate.view.TranslateView$$State;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -34,6 +37,9 @@ public final class TranslatePresenterTest {
 
     @Mock
     TranslateRepository translateRepository;
+
+    @Captor
+    private ArgumentCaptor<TranslateDataSource.ResultCallback<Translation>> loadLastTranslationCallbackCaptor;
 
     private TranslatePresenter presenter;
     private Translation translation;
@@ -68,12 +74,15 @@ public final class TranslatePresenterTest {
 
         presenter.init();
 
-        //verify(translatePresenterCache, times(1)).setTranslation(any(Translation.class));
+        verify(translateRepository).getLastTranslation(loadLastTranslationCallbackCaptor.capture());
+        loadLastTranslationCallbackCaptor.getValue().onLoaded(translation);
 
-        verify(translateViewState).showSourceLanguage(anyString());
-        verify(translateViewState).showDestinationLanguage(anyString());
-        verify(translateViewState).showSourceText(null);
-        verify(translateViewState).showTranslatedText(null);
+        verify(translatePresenterCache, times(1)).setTranslation(translation);
+
+        verify(translateViewState).showSourceLanguage(translation.getSourceLanguage().getDescription());
+        verify(translateViewState).showDestinationLanguage(translation.getDestinationLanguage().getDescription());
+        verify(translateViewState).showSourceText(translation.getSourceText());
+        verify(translateViewState).showTranslatedText(translation.getTranslatedText());
     }
 
     @Test

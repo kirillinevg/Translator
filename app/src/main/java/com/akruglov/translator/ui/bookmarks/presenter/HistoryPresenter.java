@@ -14,6 +14,7 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import timber.log.Timber;
@@ -69,6 +70,11 @@ public class HistoryPresenter extends MvpPresenter<HistoryView> implements Trans
     }
 
     @Override
+    public void onRemoveFromFavorites(HashSet<Integer> removedFromFavorites) {
+        getViewState().removeFromFavorites(removedFromFavorites);
+    }
+
+    @Override
     public void onDestroy() {
         notificationManager.removeListener(this);
         super.onDestroy();
@@ -81,5 +87,13 @@ public class HistoryPresenter extends MvpPresenter<HistoryView> implements Trans
 
     public void setFavorite(Translation translation) {
         translateRepository.setFavorite(translation);
+    }
+
+    public void showClearHistoryNotification() {
+        getViewState().showClearHistoryNotification();
+    }
+
+    public void clearTranslations() {
+        translateRepository.clearTranslations();
     }
 }

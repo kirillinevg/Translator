@@ -27,6 +27,7 @@ public class TranslateNotificationManager {
 
     public interface TranslationListener {
         void onInsert(Translation translation);
+        void onRemoveFromFavorites(HashSet<Integer> removedFromFavorites);
     }
 
     public void addListener(TranslationListener listener) {
@@ -46,9 +47,24 @@ public class TranslateNotificationManager {
         });
     }
 
+    public void notifyRemovedFromFavorites(final HashSet<Integer> removedFromFavorites) {
+        uiHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                notifyRemovedFromFavoritesOnUiThread(removedFromFavorites);
+            }
+        });
+    }
+
     private void notifyTranslationInsertedOnUiThread(Translation translation) {
         for (TranslationListener l : translationListeners) {
             l.onInsert(translation);
+        }
+    }
+
+    private void notifyRemovedFromFavoritesOnUiThread(HashSet<Integer> removedFromFavorites) {
+        for (TranslationListener l : translationListeners) {
+            l.onRemoveFromFavorites(removedFromFavorites);
         }
     }
 }

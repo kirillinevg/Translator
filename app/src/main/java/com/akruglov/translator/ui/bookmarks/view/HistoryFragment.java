@@ -1,10 +1,12 @@
 package com.akruglov.translator.ui.bookmarks.view;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.akruglov.translator.R;
 import com.akruglov.translator.data.models.Language;
@@ -26,6 +29,7 @@ import com.arellomobile.mvp.presenter.PresenterType;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import timber.log.Timber;
@@ -107,6 +111,19 @@ public class HistoryFragment extends MvpAppCompatFragment implements HistoryView
             notifyItemInserted(0);
         }
 
+        public void removeFromFavorites(HashSet<Integer> removedFromFavorites) {
+            for (int i = 0; i < translations.size(); i++) {
+                if (removedFromFavorites.contains(translations.get(i).getId())) {
+                    translations.get(i).setFavorite(false);
+                    notifyItemChanged(i);
+                }
+            }
+        }
+
+        public void clear() {
+            translations.clear();
+            notifyDataSetChanged();
+        }
 
         @Override
         public TranslationHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -178,8 +195,10 @@ public class HistoryFragment extends MvpAppCompatFragment implements HistoryView
 
     @Override
     public void insertTranslation(Translation translation) {
-        translationAdapter.insertTranslation(translation);
-        translationRecycleView.scrollToPosition(0);
+        if (translationAdapter != null) {
+            translationAdapter.insertTranslation(translation);
+            translationRecycleView.scrollToPosition(0);
+        }
     }
 
     @Override
@@ -188,5 +207,36 @@ public class HistoryFragment extends MvpAppCompatFragment implements HistoryView
         activity.navigateToTranslatePage(translation);
     }
 
+    public void showClearHistoryNotification() {
 
+        if (translationAdapter.getItemCount() == 0) {
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle(R.string.history_title)
+                .setMessage(R.string.history_clear_question)
+                .setNegativeButton(R.string.negative_button_text, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .setPositiveButton(R.string.positive_button_text, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        historyPresenter.clearTranslations();
+                        translationAdapter.clear();
+                    }
+                });
+
+        builder.create().show();
+    }
+
+    @Override
+    public void removeFromFavorites(HashSet<Integer> removedFromFavorites) {
+        translationAdapter.removeFromFavorites(removedFromFavorites);
+    }
 }
