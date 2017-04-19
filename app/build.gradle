@@ -49,5 +49,6 @@ dependencies {
     compile "com.arello-mobile:moxy-app-compat:$moxy"
 
     debugCompile "com.squareup.leakcanary:leakcanary-android:$canary"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$canary"
     testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$canary"
 }

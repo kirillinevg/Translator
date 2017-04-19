@@ -120,7 +120,7 @@ public class TranslateFragment extends MvpAppCompatFragment implements Translate
                             updateSourceText(text);
                         }
                     };
-                    uiHandler.postDelayed(textChangedHandler, 500);
+                    uiHandler.postDelayed(textChangedHandler, 1000);
                 }
             }
 

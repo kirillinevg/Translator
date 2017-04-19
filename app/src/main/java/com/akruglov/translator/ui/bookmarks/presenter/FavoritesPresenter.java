@@ -69,4 +69,12 @@ public class FavoritesPresenter extends MvpPresenter<FavoritesView> {
         getViewState().clearFavorites();
         translateRepository.removeFromFavorites(favorites);
     }
+
+    /**
+     * For testing only
+     * @param favorites
+     */
+    public void setFavorites(List<Translation> favorites) {
+        this.favorites = favorites;
+    }
 }

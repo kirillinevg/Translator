@@ -14,8 +14,9 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -39,7 +40,10 @@ public final class TranslatePresenterTest {
     TranslateRepository translateRepository;
 
     @Captor
-    private ArgumentCaptor<TranslateDataSource.ResultCallback<Translation>> loadLastTranslationCallbackCaptor;
+    private ArgumentCaptor<TranslateDataSource.ResultCallback<Translation>> translationCallbackCaptor;
+
+    @Captor
+    private ArgumentCaptor<Translation> translationCaptor;
 
     private TranslatePresenter presenter;
     private Translation translation;
@@ -62,10 +66,10 @@ public final class TranslatePresenterTest {
 
         presenter.init();
 
-        verify(translateViewState).showSourceLanguage("Русский");
-        verify(translateViewState).showDestinationLanguage("Итальянский");
-        verify(translateViewState).showSourceText("Ребенок");
-        verify(translateViewState).showTranslatedText("Bambino");
+        verify(translateViewState, times(1)).showSourceLanguage("Русский");
+        verify(translateViewState, times(1)).showDestinationLanguage("Итальянский");
+        verify(translateViewState, times(1)).showSourceText("Ребенок");
+        verify(translateViewState, times(1)).showTranslatedText("Bambino");
     }
 
     @Test
@@ -74,25 +78,31 @@ public final class TranslatePresenterTest {
 
         presenter.init();
 
-        verify(translateRepository).getLastTranslation(loadLastTranslationCallbackCaptor.capture());
-        loadLastTranslationCallbackCaptor.getValue().onLoaded(translation);
+        verify(translateRepository).getLastTranslation(translationCallbackCaptor.capture());
+        translationCallbackCaptor.getValue().onLoaded(translation);
 
         verify(translatePresenterCache, times(1)).setTranslation(translation);
 
-        verify(translateViewState).showSourceLanguage(translation.getSourceLanguage().getDescription());
-        verify(translateViewState).showDestinationLanguage(translation.getDestinationLanguage().getDescription());
-        verify(translateViewState).showSourceText(translation.getSourceText());
-        verify(translateViewState).showTranslatedText(translation.getTranslatedText());
+        verify(translateViewState, times(1)).showSourceLanguage(translation.getSourceLanguage().getDescription());
+        verify(translateViewState, times(1)).showDestinationLanguage(translation.getDestinationLanguage().getDescription());
+        verify(translateViewState, times(1)).showSourceText(translation.getSourceText());
+        verify(translateViewState, times(1)).showTranslatedText(translation.getTranslatedText());
     }
 
     @Test
-    public void updateSourceText_notNull() {
-        presenter.updateSourceText("test");
+    public void updateSourceText_notNull_notEquals_translateSuccess() {
+        when(translatePresenterCache.getTranslation()).thenReturn(translation);
+        when(translatePresenterCache.getSourceText()).thenReturn(translation.getSourceText());
 
-        verify(translatePresenterCache, times(1)).updateSourceText("test");
-        verify(translatePresenterCache, times(1)).updateTranslatedText("test");
+        presenter.updateSourceText("папа");
 
-        verify(translateViewState).showTranslatedText("test");
+        verify(translatePresenterCache, times(1)).updateSourceText("папа");
+        verify(translateRepository).translate(translationCaptor.capture(), translationCallbackCaptor.capture());
+        assertEquals(translationCaptor.getValue(), translation);
+        translationCallbackCaptor.getValue().onLoaded(translation);
+
+        verify(translatePresenterCache, times(1)).setTranslation(translation);
+        verify(translateViewState, times(1)).showTranslatedText(translation.getTranslatedText());
     }
 
     @Test
@@ -102,6 +112,102 @@ public final class TranslatePresenterTest {
         verify(translatePresenterCache, times(1)).updateSourceText(null);
         verify(translatePresenterCache, times(1)).updateTranslatedText(null);
 
-        verify(translateViewState).showTranslatedText(null);
+        verify(translateViewState, times(1)).showTranslatedText(null);
+        verify(translateViewState, times(1)).showSourceText(null);
+    }
+
+    @Test
+    public void chooseSourceLanguage() {
+        when(translatePresenterCache.getTranslation()).thenReturn(translation);
+
+        presenter.chooseSourceLanguage();
+
+        verify(translateViewState, times(1)).chooseSourceLanguage(translation.getSourceLanguage().getId());
+    }
+
+    @Test
+    public void chooseDestinationLanguage() {
+        when(translatePresenterCache.getTranslation()).thenReturn(translation);
+
+        presenter.chooseDestinationLanguage();
+
+        verify(translateViewState, times(1)).chooseDestinationLanguage(translation.getDestinationLanguage().getId());
+    }
+
+    @Test
+    public void showTranslation() {
+        presenter.showTranslation(translation);
+
+        verify(translatePresenterCache, times(1)).setTranslation(translation);
+        verify(translateViewState, times(1)).showSourceLanguage(translation.getSourceLanguage().getDescription());
+        verify(translateViewState, times(1)).showDestinationLanguage(translation.getDestinationLanguage().getDescription());
+        verify(translateViewState, times(1)).showSourceText(translation.getSourceText());
+        verify(translateViewState, times(1)).showTranslatedText(translation.getTranslatedText());
+    }
+
+    @Test
+    public void saveLastTranslation() {
+        when(translatePresenterCache.getTranslation()).thenReturn(translation);
+
+        presenter.saveLastTranslation();
+
+        verify(translateRepository, times(1)).saveLastTranslation(translation);
+    }
+
+    @Test
+    public void swapLanguages() {
+        when(translatePresenterCache.getTranslation()).thenReturn(translation);
+        when(translatePresenterCache.getSourceText()).thenReturn(translation.getSourceText());
+
+        presenter.swapLanguages();
+
+        verify(translatePresenterCache, times(1)).swapLanguages();
+
+        verify(translateRepository).translate(translationCaptor.capture(), translationCallbackCaptor.capture());
+        assertEquals(translationCaptor.getValue(), translation);
+        translationCallbackCaptor.getValue().onLoaded(translation);
+
+        verify(translatePresenterCache, times(1)).setTranslation(translation);
+        verify(translateViewState, times(1)).showTranslatedText(translation.getTranslatedText());
+        verify(translateViewState, times(1)).showSourceLanguage(translatePresenterCache.getTranslation().getSourceLanguage().getDescription());
+        verify(translateViewState, times(1)).showDestinationLanguage(translatePresenterCache.getTranslation().getDestinationLanguage().getDescription());
+    }
+
+    @Test
+    public void selectSourceLanguage() {
+        when(translatePresenterCache.getTranslation()).thenReturn(translation);
+        when(translatePresenterCache.getSourceText()).thenReturn(translation.getSourceText());
+        when(translateRepository.getLanguageById(anyInt())).thenReturn(translation.getSourceLanguage());
+
+        presenter.selectSourceLanguage(translation.getSourceLanguage().getId());
+
+        verify(translatePresenterCache, times(1)).setSourceLanguage(translation.getSourceLanguage());
+        verify(translateViewState, times(1)).showSourceLanguage(translation.getSourceLanguage().getDescription());
+
+        verify(translateRepository).translate(translationCaptor.capture(), translationCallbackCaptor.capture());
+        assertEquals(translationCaptor.getValue(), translation);
+        translationCallbackCaptor.getValue().onLoaded(translation);
+
+        verify(translatePresenterCache, times(1)).setTranslation(translation);
+        verify(translateViewState, times(1)).showTranslatedText(translation.getTranslatedText());
+    }
+
+    @Test
+    public void selectDestinationLanguage() {
+        when(translatePresenterCache.getTranslation()).thenReturn(translation);
+        when(translatePresenterCache.getSourceText()).thenReturn(translation.getSourceText());
+        when(translateRepository.getLanguageById(anyInt())).thenReturn(translation.getDestinationLanguage());
+
+        presenter.selectDestinatonLanguage(translation.getDestinationLanguage().getId());
+
+        verify(translatePresenterCache, times(1)).setDestinationLanguage(translation.getDestinationLanguage());
+        verify(translateViewState, times(1)).showDestinationLanguage(translation.getDestinationLanguage().getDescription());
+
+        verify(translateRepository).translate(translationCaptor.capture(), translationCallbackCaptor.capture());
+        assertEquals(translationCaptor.getValue(), translation);
+        translationCallbackCaptor.getValue().onLoaded(translation);
+
+        verify(translatePresenterCache, times(1)).setTranslation(translation);
+        verify(translateViewState, times(1)).showTranslatedText(translation.getTranslatedText());
     }
 }

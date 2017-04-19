@@ -3,7 +3,6 @@ package com.akruglov.translator;
 import android.app.Application;
 
 import com.squareup.leakcanary.*;
-import com.squareup.leakcanary.BuildConfig;
 
 import timber.log.Timber;
 
@@ -16,10 +15,6 @@ public class AndroidApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return;
-        }
 
         if (BuildConfig.DEBUG) {
             LeakCanary.install(this);

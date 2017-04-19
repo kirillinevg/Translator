@@ -3,6 +3,7 @@ package com.akruglov.translator.ui.translate.presenter;
 import com.akruglov.translator.data.models.Language;
 import com.akruglov.translator.data.models.Translation;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -15,11 +16,23 @@ import static org.junit.Assert.assertFalse;
 
 public class TranslatePresenterCacheTest {
 
+    private Translation translation;
+    private TranslatePresenterCache translatePresenterCache;
+
+    @Before
+    public void setUp() {
+        translatePresenterCache = new TranslatePresenterCache();
+        translation = new Translation(
+                -1,
+                new Language(0, "ru", "Русский"),
+                new Language(1, "en", "Англйский"),
+                "папа",
+                "father",
+                false);
+    }
+
     @Test
     public void common_test() {
-
-        // create cache
-        TranslatePresenterCache translatePresenterCache = new TranslatePresenterCache();
 
         // assert isCacheExist
         assertFalse(translatePresenterCache.isCacheExists());
@@ -29,7 +42,7 @@ public class TranslatePresenterCacheTest {
         translatePresenterCache.updateTranslatedText(null);
 
         // update cache
-        translatePresenterCache.setTranslation(getData());
+        translatePresenterCache.setTranslation(translation);
 
         // update texts
         translatePresenterCache.updateSourceText("мама");
@@ -38,15 +51,32 @@ public class TranslatePresenterCacheTest {
         // assert new texts
         assertEquals(translatePresenterCache.getTranslation().getSourceText(), "мама");
         assertEquals(translatePresenterCache.getTranslation().getTranslatedText(), "mother");
+
+
+
+        assertEquals(translatePresenterCache.getSourceText(), translation.getSourceText());
     }
 
-    private Translation getData() {
-        return new Translation(
-                -1,
-                new Language(0, "ru", "Русский"),
-                new Language(1, "en", "Англйский"),
-                "папа",
-                "father",
-                false);
+    @Test
+    public void swapLanguages_test() {
+        translatePresenterCache.setTranslation(translation);
+
+        Translation copy = new Translation(translation);
+
+        translatePresenterCache.swapLanguages();
+
+        assertEquals(translatePresenterCache.getTranslation().getSourceLanguage(), copy.getDestinationLanguage());
+        assertEquals(translatePresenterCache.getTranslation().getDestinationLanguage(), copy.getSourceLanguage());
+    }
+
+    @Test
+    public void setLanguages_test() {
+        translatePresenterCache.setTranslation(translation);
+        Language newLanguage = new Language(8, "fr", "Французский");
+        translatePresenterCache.setSourceLanguage(newLanguage);
+        translatePresenterCache.setDestinationLanguage(newLanguage);
+
+        assertEquals(translatePresenterCache.getTranslation().getSourceLanguage(), newLanguage);
+        assertEquals(translatePresenterCache.getTranslation().getDestinationLanguage(), newLanguage);
     }
 }
