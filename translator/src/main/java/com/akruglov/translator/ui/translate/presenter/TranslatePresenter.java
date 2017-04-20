@@ -64,7 +64,7 @@ public class TranslatePresenter extends MvpPresenter<TranslateView> {
     }
 
     public void updateSourceText(String sourceText) {
-        if (sourceText == null || sourceText.isEmpty()) {
+        if (sourceText == null || sourceText.trim().isEmpty()) {
             clearTexts();
         } else if (!sourceText.equals(translatePresenterCache.getSourceText())) {
             translatePresenterCache.updateSourceText(sourceText);
